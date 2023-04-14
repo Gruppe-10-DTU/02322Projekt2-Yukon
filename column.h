@@ -12,6 +12,6 @@ __attribute__((unused)) typedef struct {
     Card *tail;
 } Column;
 
-void
+void appendCard()
 
 #endif //INC_02322PROJEKT2_YUKON_COLUMN_H

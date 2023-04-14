@@ -6,6 +6,7 @@
 #define INC_02322PROJEKT2_YUKON_FILEHANDLER_H
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "deck.h"
 
 Card *deckFromFile(char *filename);

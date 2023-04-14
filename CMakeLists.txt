@@ -9,6 +9,9 @@ add_executable(02322Projekt2_Yukon
         deck.c
         deck.h
         main.c
-        column.c
-        column.h
+#        column.c
+#        column.h
+        new.txt
+#        board.c
+#        board.h
         )

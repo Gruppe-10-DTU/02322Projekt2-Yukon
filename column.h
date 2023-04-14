@@ -6,12 +6,14 @@
 #define INC_02322PROJEKT2_YUKON_COLUMN_H
 #include "deck.h"
 
-__attribute__((unused)) typedef struct {
+typedef struct {
     int size;
     Card *head;
     Card *tail;
 } Column;
 
-void appendCard()
+void appendCard(Column **pColumn, Card **pCard);
+
+void moveCard(Column **From, Column **To, char faceVal);
 
 #endif //INC_02322PROJEKT2_YUKON_COLUMN_H

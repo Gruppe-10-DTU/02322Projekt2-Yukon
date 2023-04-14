@@ -12,6 +12,7 @@ typedef struct card{
     char suit;
     int visible;
     struct card *nextCard;
+    struct card *prevCard;
 }Card;
 
 void addCard(Card **head, char suit, char order);

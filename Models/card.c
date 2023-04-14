@@ -6,3 +6,6 @@ struct Card {
     Char suit;
     Char order;
 };
+
+
+

@@ -13,4 +13,9 @@ Card *deckFromFile(char *filename);
 
 Card *newDeck();
 
+void saveCard(Card *card, FILE *file);
+
+void saveDeck(Card **deck, char *filename);
+
+
 #endif //INC_02322PROJEKT2_YUKON_FILEHANDLER_H

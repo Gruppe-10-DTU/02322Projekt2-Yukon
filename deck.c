@@ -9,6 +9,7 @@ void addCard(Card **head,char suit, char order){
     newCard->order = order;
     newCard->suit = suit;
     newCard->visible = 0;
+    newCard->prevCard = NULL;
     if (*head == NULL){
         *head = newCard;
         newCard->nextCard = NULL;

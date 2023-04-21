@@ -11,7 +11,6 @@ int main(){
 
     //Nyt deck
     Card *deck = newDeck();
-    //j
 
     return 0;
 }

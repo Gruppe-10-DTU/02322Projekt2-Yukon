@@ -11,6 +11,7 @@ int main(){
 
     //Nyt deck
     Card *deck = deckFromFile("invalidDeckTooManyCards.txt");
+    deck = deckFromFile("invalidDeckDublicateCards.txt");
 
     return 0;
 }

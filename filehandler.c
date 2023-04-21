@@ -11,21 +11,20 @@ Card *deckFromFile(char *filename){
     sprintf(path,"..\\%s", filename);
 
     char str[4];
-    int counter = 0;
     file = fopen (path, "r");
     if(file == NULL){
         printf("error");
         return NULL;
     }
+    int i;
     while (fgets(str, 4, file) != NULL){
-        if(deckHasCard(deck, str[1], str[0]) == 1 || counter >= 52){
+        i = 0;
+        if(deckIsValid(deck, str[1], str[0], &i) == 0){
             freeDeck(deck);
             deck = NULL;
-            printf("The deck file was not a valid deck.");
             break;
         }else{
             addCard(&deck, str[1], str[0]);
-            counter++;
         }
     }
 
@@ -62,13 +61,16 @@ Card *newDeck(){
     return deckFromFile("new.txt");
 }
 
-int deckHasCard(Card *card, char suit, char order){
+int deckIsValid(Card *card, char suit, char order, int *counter){
     if(card == NULL){
         return 1;
-    }
-    if(card->order == order && card->suit == suit){
+    }else if(card->order == order && card->suit == suit) {
+        printf("The deck has dublicate cards");
+        return 0;
+    }else if(counter >= 52){
+        printf("The deck contains too many cards");
         return 0;
     }else{
-        return deckHasCard(card->nextCard, suit, order);
+        return deckIsValid(card->nextCard, suit, order, counter++);
     }
 };

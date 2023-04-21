@@ -17,7 +17,7 @@ void saveCard(Card *card, FILE *file);
 
 void saveDeck(Card *deck, char *filename);
 
-int deckHasCard(Card *head, char suit, char order);
+int deckIsValid(Card *head, char suit, char order, int *counter);
 
 
 #endif //INC_02322PROJEKT2_YUKON_FILEHANDLER_H

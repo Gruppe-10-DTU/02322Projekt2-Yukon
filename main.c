@@ -44,14 +44,13 @@ void getCommand(){
 }
 
 void clearConsole(){
-    printf("%s\n\n\n\n\n\n\n","");
+    printf("%s\n\n\n\n\n\n\n\n\n","");
 }
 
 int main(){
     //Terminal input/output
-    printBoard();
-    clearConsole();
     printConsoleWindow();
+    clearConsole();
     //Reader
 
     //Nyt deck

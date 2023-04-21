@@ -34,12 +34,12 @@ int findLargestColumn(Column* cou){
     return MAXSIZE;
 }
 
-void printBoard(){
+void printBoard(Column * cou){
     for(int i = 0; i < findLargestColumn(c)+1; i++){
         for (int j = 0; j < columns; ++j) {
             char* tmp = (char*) malloc(100 * sizeof(char));
-            if(findCardX(c,j)->visible != 0) {
-                sprintf(tmp, "%c%c", findCardX(c, j)->suit, findCardX(c, j)->order);
+            if(findCardX(&cou[j],j)->visible != 0) {
+                sprintf(tmp, "%c%c", findCardX(&cou[j], j)->suit, findCardX(&cou[j], j)->order);
                 printf("   %s", tmp != NULL ? tmp : " ");
                 free(tmp);
             }else{

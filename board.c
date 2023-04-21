@@ -7,13 +7,12 @@
 #include "column.h"
 #include "stdio.h"
 int const columns = 7;
-Column* c;
 Card* findCardX(Column* cou, int X){
     if(X > cou->size){
         return NULL;
     }else {
         Card *tmp1;
-        tmp1 = c->head;
+        tmp1 = cou->head;
         for (int i = 0; i < X; i++) {
             if(tmp1->visible != 1){
                 return NULL;
@@ -34,7 +33,7 @@ int findLargestColumn(Column* cou){
     return MAXSIZE;
 }
 
-void printBoard(Column * cou){
+void printBoard(Column* cou){
     for(int i = 0; i < findLargestColumn(c)+1; i++){
         for (int j = 0; j < columns; ++j) {
             char* tmp = (char*) malloc(100 * sizeof(char));

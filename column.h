@@ -14,6 +14,6 @@ typedef struct {
 
 void appendCard(Column **pColumn, Card **pCard);
 
-void moveCard(Column **From, Column **To, char faceVal);
+void moveCard(Column **From, Column **To, char faceVal[]);
 
 #endif //INC_02322PROJEKT2_YUKON_COLUMN_H

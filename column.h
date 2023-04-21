@@ -6,6 +6,7 @@
 #define INC_02322PROJEKT2_YUKON_COLUMN_H
 #include "deck.h"
 
+
 typedef struct {
     int size;
     Card *head;

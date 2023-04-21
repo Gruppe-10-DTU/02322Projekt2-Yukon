@@ -14,4 +14,4 @@ add_executable(02322Projekt2_Yukon
         new.txt
 #        board.c
 #        board.h
-        )
+        board.c)

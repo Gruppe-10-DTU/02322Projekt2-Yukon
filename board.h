@@ -6,3 +6,11 @@
 #define INC_02322PROJEKT2_YUKON_BOARD_H
 
 #endif //INC_02322PROJEKT2_YUKON_BOARD_H
+
+#include "column.h"
+
+Card* findCardX(Column* cou, int X);
+
+int findLargestColumn(Column* cou);
+
+void printBoard();

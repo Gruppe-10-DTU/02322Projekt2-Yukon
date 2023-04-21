@@ -14,7 +14,8 @@ typedef struct card{
     struct card *nextCard;
     struct card *prevCard;
 }Card;
-
 void addCard(Card **head, char suit, char order);
+
+void freeDeck(Card *head);
 
 #endif //INC_02322PROJEKT2_YUKON_DECK_H

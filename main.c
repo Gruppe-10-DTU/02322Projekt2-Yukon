@@ -10,7 +10,7 @@ int main(){
     //Reader
 
     //Nyt deck
-    Card *deck = newDeck();
+    Card *deck = deckFromFile("invalidDeckTooManyCards.txt");
 
     return 0;
 }

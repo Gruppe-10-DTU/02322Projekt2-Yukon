@@ -3,7 +3,10 @@
 #include "../column.h"
 #include "column-test.h"
 
-void testAppendCard(){
+/**
+ * @author Philip Astrup Cramer
+ */
+void testAppendToColumn(){
     //SETUP START
     Card *testcard1 = (Card *) malloc(sizeof(Card));
     testcard1->suit = 'H';
@@ -19,7 +22,7 @@ void testAppendCard(){
     //SETUP FINISHED
 
     //TEST
-    appendCard(&column1, &testcard1);
+    appendToColumn(&column1, &testcard1);
     if (column1->head == NULL) printf("\tDidn't update head\n");
     if (column1->tail == NULL) printf("\tDidn't update Tail\n");
     if (column1->size == 0) printf("\tDidn't update size\n");
@@ -29,6 +32,10 @@ void testAppendCard(){
     free(testcard1);
     free(column1);
 }
+
+/**
+ * @author Philip Astrup Cramer
+ */
 void testMoveCard(){
     //SETUP START
     Card *queenSpades = (Card *) malloc(sizeof(Card));
@@ -86,11 +93,11 @@ void testMoveCard(){
     foundation->head = NULL;
     foundation->tail = NULL;
 
-    appendCard(&column1, &queenSpades);
-    appendCard(&column1, &kingHearts);
-    appendCard(&column2, &aceClubs);
-    appendCard(&column2, &jackHearts);
-    appendCard(&column3,&twoClubs);
+    appendToColumn(&column1, &queenSpades);
+    appendToColumn(&column1, &kingHearts);
+    appendToColumn(&column2, &aceClubs);
+    appendToColumn(&column2, &jackHearts);
+    appendToColumn(&column3,&twoClubs);
     //SETUP FINISHED
 
 
@@ -126,6 +133,9 @@ void testMoveCard(){
     free(foundation);
 }
 
+/**
+ * @author Philip Astrup Cramer
+ */
 void testMoveIsValid(){
     //SETUP START
     Card *queenSpades = (Card *) malloc(sizeof(Card));
@@ -183,10 +193,10 @@ void testMoveIsValid(){
     foundation->head = NULL;
     foundation->tail = NULL;
 
-    appendCard(&column1, &queenSpades);
-    appendCard(&column1, &kingHearts);
-    appendCard(&column2, &aceClubs);
-    appendCard(&column2, &jackHearts);
+    appendToColumn(&column1, &queenSpades);
+    appendToColumn(&column1, &kingHearts);
+    appendToColumn(&column2, &aceClubs);
+    appendToColumn(&column2, &jackHearts);
     //SETUP FINISH
 
     //TEST
@@ -208,6 +218,9 @@ void testMoveIsValid(){
     free(foundation);
 }
 
+/**
+ * @author Philip Astrup Cramer
+ */
 void columnTest(){
     printf("Append card test result:\n");
     testAppendCard();

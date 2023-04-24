@@ -12,7 +12,8 @@ typedef struct {
     Card *tail;
 } Column;
 
-void appendCard(Column **pColumn, Card **pCard);
+void addToColumn(Column **pColumn, Card **pCard);
+void appendToColumn(Column **pColumn, Card **pCard);
 
 void moveCard(Column **From, Column **To, Card *mvCard);
 

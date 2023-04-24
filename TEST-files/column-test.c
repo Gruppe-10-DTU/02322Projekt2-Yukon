@@ -6,6 +6,52 @@
 /**
  * @author Philip Astrup Cramer
  */
+void testAddToColumn() {
+    //SETUP START
+    Card *testcard1 = (Card *) malloc(sizeof(Card));
+    testcard1->suit = 'H';
+    testcard1->order = 'K';
+    testcard1->visible = 1;
+    testcard1->prevCard = NULL;
+    testcard1->nextCard = NULL;
+
+    Card *testcard2 = (Card *) malloc(sizeof(Card));
+    testcard2->suit = 'S';
+    testcard2->order = 'Q';
+    testcard2->visible = 1;
+    testcard2->prevCard = NULL;
+    testcard2->nextCard = NULL;
+
+    Column *column1 = (Column *) malloc(sizeof(Column));
+    column1->head = NULL;
+    column1->tail = NULL;
+    column1->size = 0;
+    //SETUP FINISHED
+
+    //TEST 1
+    addToColumn(&column1, &testcard1);
+    if (column1->head == NULL) printf("\tTEST 1: Didn't update head\n");
+    if (column1->tail == NULL) printf("\tTEST 1: Didn't update Tail\n");
+    if (column1->size == 0) printf("\tTEST 1: Didn't update size\n");
+    else printf("\tTEST 1: Success!\n");
+
+    //TEST 2
+    addToColumn(&column1, &testcard2);
+    if (column1->head == testcard1) printf("\tTEST 2: Didn't update head\n");
+    if (testcard1->prevCard != testcard2 || testcard2->nextCard != testcard1) printf("\tTEST 2: Didn't link cards\n");
+    if (column1->size == 1) printf("\tTEST 2: Didn't update size\n");
+    else printf("\tTEST 2: Success!\n");
+
+    //TEARDOWN
+    free(testcard1);
+    free(testcard2);
+    free(column1);
+
+}
+
+/**
+ * @author Philip Astrup Cramer
+ */
 void testAppendToColumn(){
     //SETUP START
     Card *testcard1 = (Card *) malloc(sizeof(Card));
@@ -15,6 +61,13 @@ void testAppendToColumn(){
     testcard1->prevCard = NULL;
     testcard1->nextCard = NULL;
 
+    Card *testcard2 = (Card *) malloc(sizeof(Card));
+    testcard2->suit = 'S';
+    testcard2->order = 'Q';
+    testcard2->visible = 1;
+    testcard2->prevCard = NULL;
+    testcard2->nextCard = NULL;
+
     Column *column1 = (Column *) malloc(sizeof(Column));
     column1->head = NULL;
     column1->tail = NULL;
@@ -23,10 +76,17 @@ void testAppendToColumn(){
 
     //TEST
     appendToColumn(&column1, &testcard1);
-    if (column1->head == NULL) printf("\tDidn't update head\n");
-    if (column1->tail == NULL) printf("\tDidn't update Tail\n");
-    if (column1->size == 0) printf("\tDidn't update size\n");
-    else printf("\tSuccess!\n");
+    if (column1->head == NULL) printf("\tTEST 1: Didn't update head\n");
+    if (column1->tail == NULL) printf("\tTEST 1: Didn't update Tail\n");
+    if (column1->size == 0) printf("\tTEST 1: Didn't update size\n");
+    else printf("\tTEST 1: Success!\n");
+
+    //TEST 2
+    appendToColumn(&column1, &testcard2);
+    if (column1->tail == testcard1) printf("\tTEST 2: Didn't update tail\n");
+    if (testcard1->nextCard != testcard2 || testcard2->prevCard != testcard1) printf("\tTEST 2: Didn't link cards\n");
+    if (column1->size == 1) printf("\tTEST 2: Didn't update size\n");
+    else printf("\tTEST 2: Success!\n");
 
     //TEARDOWN
     free(testcard1);
@@ -107,9 +167,9 @@ void testMoveCard(){
     int c2SizeBeforeMove = column2->size;
     Card *c2HeadBeforeMove = column2->head;
     moveCard(&column2,&column1,jackHearts);
-    if (c1SizeBeforeMove == column1->size || c1HeadBeforeMove == column1->head) printf("\tMove-1: Updating 'to' column failed\n");
-    if (c2HeadBeforeMove == column2->head || c2SizeBeforeMove == column2->size) printf("\tMove-1: Updating 'from' column failed\n");
-    else printf("\tMove-1: Success\n");
+    if (c1SizeBeforeMove == column1->size || c1HeadBeforeMove == column1->head) printf("\tTEST 1: Updating 'to' column failed\n");
+    if (c2HeadBeforeMove == column2->head || c2SizeBeforeMove == column2->size) printf("\tTEST 1: Updating 'from' column failed\n");
+    else printf("\tTEST 1: Success\n");
 
     //TEST 2
     c1HeadBeforeMove = column1->head;
@@ -117,9 +177,9 @@ void testMoveCard(){
     int fSizeBeforeMove = foundation->size;
     Card *fHeadBeforeMove = foundation->head;
     moveCard(&column1, &foundation, aceClubs);
-    if (fSizeBeforeMove == foundation->size || fHeadBeforeMove == foundation->head) printf("\tMove-2: Updating 'to' column failed\n");
-    if (c1SizeBeforeMove == column1->size || c1HeadBeforeMove == column1->head) printf("\tMove-2: Updating 'from' column failed\n");
-    else printf("\tMove-2: Success\n");
+    if (fSizeBeforeMove == foundation->size || fHeadBeforeMove == foundation->head) printf("\tTEST 2: Updating 'to' column failed\n");
+    if (c1SizeBeforeMove == column1->size || c1HeadBeforeMove == column1->head) printf("\tTEST 2: Updating 'from' column failed\n");
+    else printf("\tTEST 2: Success\n");
 
     //TEARDOWN
     free(queenSpades);
@@ -222,8 +282,10 @@ void testMoveIsValid(){
  * @author Philip Astrup Cramer
  */
 void columnTest(){
-    printf("Append card test result:\n");
-    testAppendCard();
+    printf("Add to column test result:\n");
+    testAddToColumn();
+    printf("Append to column test result:\n");
+    testAppendToColumn();
     printf("Move card test result:\n");
     testMoveCard();
     printf("Move is valid test result:\n");

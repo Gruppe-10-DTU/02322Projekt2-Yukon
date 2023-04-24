@@ -4,8 +4,25 @@
 
 #include "column.h"
 
+/**
+ *
+ * @param pColumn target column
+ * @param pCard card to add
+ *
+ * @author Philip Astrup Cramer
+ */
 void addToColumn(Column **pColumn, Card **pCard){
-
+    if ((*pColumn)->tail == NULL && (*pColumn)->head == NULL) {
+        (*pColumn)->tail = (*pCard);
+        (*pColumn)->head = (*pCard);
+    } else {
+        Card *prevHead = (*pColumn)->head;
+        prevHead->prevCard = (*pCard);
+        (*pCard)->nextCard = prevHead;
+        (*pColumn)->head = (*pCard);
+        (*pCard)->prevCard = NULL;
+    }
+    (*pColumn)->size += 1;
 }
 
 

@@ -1,10 +1,22 @@
 //
-// Created by asbpo on 14-04-2023.
+// Created by pcramer on 14-04-2023.
 //
 
 #include "column.h"
 
-void appendCard(Column **pColumn, Card **pCard) {
+void addToColumn(Column **pColumn, Card **pCard){
+
+}
+
+
+/**
+ *
+ * @param pColumn target column
+ * @param pCard card to append
+ *
+ * @author Philip Astrup Cramer
+ */
+void appendToColumn(Column **pColumn, Card **pCard) {
     if ((*pColumn)->tail == NULL && (*pColumn)->head == NULL) {
         (*pColumn)->tail = (*pCard);
         (*pColumn)->head = (*pCard);
@@ -16,6 +28,15 @@ void appendCard(Column **pColumn, Card **pCard) {
     }
     (*pColumn)->size += 1;
 }
+
+/**
+ *
+ * @param from origin column
+ * @param to destination column
+ * @param mvCard the card to be moved
+ *
+ * @author Philip Astrup Cramer
+ */
 void moveCard(Column **from, Column **to, Card *mvCard){
     Card *current = (*from)->head;
     int mvCount = 1;
@@ -25,7 +46,7 @@ void moveCard(Column **from, Column **to, Card *mvCard){
         mvCount++;
         if(current == NULL) return;
     }
-    //updates the head of the from column
+    //updates the head of the 'from' column
     (*from)->head = current->nextCard;
     if((*from)->head == NULL){
         (*from)->tail = NULL;
@@ -43,6 +64,15 @@ void moveCard(Column **from, Column **to, Card *mvCard){
     (*to)->head = current;
     (*to)->size += mvCount;
 }
+
+/**
+ * @param mvCard pointer to the card to move
+ * @param to the place to move
+ * @param toFoundation int 1 represents a move to foundation
+ * @return 1 if valid
+ *
+ * @author Philip Astrup Cramer
+ */
 int moveIsValid(Card **mvCard, Column **to, int toFoundation){
     if(!((*mvCard)->visible)) return 0;
     char mvSuit = (*mvCard)->suit;

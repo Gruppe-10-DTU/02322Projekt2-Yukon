@@ -9,15 +9,17 @@ set(Headers
         column.h
         filehandler.h)
 set(Sources
-        main.c
         board.c
         column.c
         filehandler.c
         deck.c)
+add_executable(02322Projekt2-Yukon main.c ${Sources} ${Headers})
 
-add_executable(02322Projekt2-Yukon ${Sources} ${Headers})
 
-
-set(Test_Source_Files TEST-files/main-test.c TEST-files/column-test.c deck.c column.c)
-set(Test_Headers TEST-files/column-test.h)
+set(Test_Source_Files
+        TEST-files/main-test.c
+        TEST-files/column-test.c
+        ${Sources})
+set(Test_Headers
+        TEST-files/column-test.h)
 add_executable(Yukon_Test ${Test_Source_Files} ${Headers} ${Test_Headers})

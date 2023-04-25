@@ -7,7 +7,7 @@
 
 int main(){
 
-    columnTest();
+    printf("Column test result: %d", columnTest());
 
     return 0;
 }

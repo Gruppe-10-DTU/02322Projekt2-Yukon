@@ -5,8 +5,8 @@
 #ifndef INC_02322PROJEKT2_YUKON_COLUMN_TEST_H
 #define INC_02322PROJEKT2_YUKON_COLUMN_TEST_H
 
-void testAppendToColumn();
-void testMoveCard();
-void testMoveIsValid();
-void columnTest();
+int testAppendToColumn();
+int testMoveCard();
+int testMoveIsValid();
+int columnTest();
 #endif //INC_02322PROJEKT2_YUKON_COLUMN_TEST_H

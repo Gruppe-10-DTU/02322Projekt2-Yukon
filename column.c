@@ -1,10 +1,39 @@
 //
-// Created by asbpo on 14-04-2023.
+// Created by pcramer on 14-04-2023.
 //
 
 #include "column.h"
 
-void appendCard(Column **pColumn, Card **pCard) {
+/**
+ *
+ * @param pColumn target column
+ * @param pCard card to add
+ *
+ * @author Philip Astrup Cramer
+ */
+void addToColumn(Column **pColumn, Card **pCard){
+    if ((*pColumn)->tail == NULL && (*pColumn)->head == NULL) {
+        (*pColumn)->tail = (*pCard);
+        (*pColumn)->head = (*pCard);
+    } else {
+        Card *prevHead = (*pColumn)->head;
+        prevHead->prevCard = (*pCard);
+        (*pCard)->nextCard = prevHead;
+        (*pColumn)->head = (*pCard);
+        (*pCard)->prevCard = NULL;
+    }
+    (*pColumn)->size += 1;
+}
+
+
+/**
+ *
+ * @param pColumn target column
+ * @param pCard card to append
+ *
+ * @author Philip Astrup Cramer
+ */
+void appendToColumn(Column **pColumn, Card **pCard) {
     if ((*pColumn)->tail == NULL && (*pColumn)->head == NULL) {
         (*pColumn)->tail = (*pCard);
         (*pColumn)->head = (*pCard);
@@ -14,17 +43,27 @@ void appendCard(Column **pColumn, Card **pCard) {
         (*pCard)->prevCard = lastCard;
         (*pColumn)->tail = (*pCard);
     }
+    (*pColumn)->size += 1;
 }
-void moveCard(Column **from, Column **to, char faceVal[]){
+
+/**
+ *
+ * @param from origin column
+ * @param to destination column
+ * @param mvCard the card to be moved
+ *
+ * @author Philip Astrup Cramer
+ */
+void moveCard(Column **from, Column **to, Card *mvCard){
     Card *current = (*from)->head;
     int mvCount = 1;
-    //Iterates throug the from coloumn until match or end is found
-    while(current->suit != faceVal[1] && current->order != faceVal[0]){
+    //Iterates through the 'from' column until match or end is found
+    while(current->suit != mvCard->suit && current->order != mvCard->order){
         current = current->nextCard;
         mvCount++;
         if(current == NULL) return;
     }
-    //updates the head of the from column
+    //updates the head of the 'from' column
     (*from)->head = current->nextCard;
     if((*from)->head == NULL){
         (*from)->tail = NULL;
@@ -35,6 +74,7 @@ void moveCard(Column **from, Column **to, char faceVal[]){
 
     //Moves the card and finds new head of the column
     current->nextCard = (*to)->head;
+    if((*to)->tail == NULL) (*to)->tail = current;
     while(current->prevCard != NULL){
         current = current->prevCard;
     }
@@ -42,5 +82,34 @@ void moveCard(Column **from, Column **to, char faceVal[]){
     (*to)->size += mvCount;
 }
 
+/**
+ * @param mvCard pointer to the card to move
+ * @param to the place to move
+ * @param toFoundation int 1 represents a move to foundation
+ * @return 1 if valid
+ *
+ * @author Philip Astrup Cramer
+ */
+int moveIsValid(Card **mvCard, Column **to, int toFoundation){
+    if(!((*mvCard)->visible)) return 0;
+    char mvSuit = (*mvCard)->suit;
+    char mvOrder = (*mvCard)->order;
+    if ((*to)->head == NULL && ((toFoundation && mvOrder == 'A') || (!toFoundation && mvOrder == 'K'))) return 1;
+    else if ((*to)->head == NULL) return 0;
+    char toSuit = (*to)->head->suit;
+    char toOrder = (*to)->head->order;
+    int direction = 1;
+    if(toFoundation) direction *= -1;
+    if((mvSuit != toSuit) ^ (toFoundation)){                        // if to foundation suit's cant match
+        if(toOrder - mvOrder ==  1 * direction) return 1;           // normal number difference
+        else if (toOrder - mvOrder == -6 * direction) return 1;     // K - Q
+        else if (toOrder - mvOrder == 7 * direction) return 1;      // Q - J
+        else if (toOrder - mvOrder == -10 * direction) return 1;    // Q - J
+        else if (toOrder - mvOrder == 27 * direction) return 1;     // T - 9
+        else if (toOrder - mvOrder == -15 * direction) return 1;    // 2 - A
+        else return 0;
+    }
+    return 0;
+}
 
 

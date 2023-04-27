@@ -109,6 +109,24 @@ void printGameConsole(char *lastCommand, char *message){
     printf("MESSAGE: %s\n",message);
     printf("INPUT >");
 }
+void printTitle(){
+    clearView();
+    printf(" __     __    _                        \n"
+           " \\ \\   / /   | |                       \n"
+           "  \\ \\_/ /   _| | _____  _ __           \n"
+           "   \\   / | | | |/ / _ \\| '_ \\          \n"
+           "    | || |_| |   < (_) | | | |         \n"
+           "   _|_|_\\__,_|_|\\_\\___/|_| |_|         \n"
+           "  / ____|     | (_) |      (_)         \n"
+           " | (___   ___ | |_| |_ __ _ _ _ __ ___ \n"
+           "  \\___ \\ / _ \\| | | __/ _` | | '__/ _ \\\n"
+           "  ____) | (_) | | | || (_| | | | |  __/\n"
+           " |_____/ \\___/|_|_|\\__\\__,_|_|_|  \\___|\n"
+           "                                       \n"
+           "                                       \n"
+           "");
+    printGameConsole("","WELCOME TO YUKON SOLITAIRE");
+}
 
 void clearView(){
 #ifdef __linux__

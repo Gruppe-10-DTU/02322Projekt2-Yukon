@@ -8,11 +8,11 @@
 
 int main(){
 
-    printf("Column test result: %d\n", columnTest());
-    printf("============================= BOARD TEST TOP =============================\n");
-    testPrintboard();
+    printf("Column test exit code %d\n", columnTest());
+    printf("Board test exit code %d\n", testBoard());
+    printf("============================ BOARD TEST PRINT ============================\n");
+    testPrintBoard();
     testPrintGameConsole();
-    printf("\n============================= BOARD TEST END =============================\n");
-
+    printf("\n============================ BOARD TEST PRINT ============================\n");
     return 0;
 }

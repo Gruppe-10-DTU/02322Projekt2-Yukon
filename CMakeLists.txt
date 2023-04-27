@@ -19,7 +19,7 @@ add_executable(02322Projekt2-Yukon main.c ${Sources} ${Headers})
 set(Test_Source_Files
         TEST-files/main-test.c
         TEST-files/column-test.c
-        ${Sources})
+        ${Sources} TEST-files/board-test.c)
 set(Test_Headers
-        TEST-files/column-test.h)
+        TEST-files/column-test.h TEST-files/board-test.c TEST-files/board-test.h)
 add_executable(Yukon_Test ${Test_Source_Files} ${Headers} ${Test_Headers})

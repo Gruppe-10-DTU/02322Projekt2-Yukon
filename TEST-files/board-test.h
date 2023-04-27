@@ -10,6 +10,10 @@
 #include "../column.h"
 #include "../board.h"
 
-void testPrintboard();
+int testCreateBoard();
+int testLoadDeck();
+int testClearBoard();
+void testPrintBoard();
 void testPrintGameConsole();
+int testBoard();
 #endif //INC_02322PROJEKT2_YUKON_BOARD_TEST_H

@@ -4,51 +4,72 @@
 
 #include "board-test.h"
 
-
-void testPrintboard() {
-    //SETUP START
+int testCreateBoard(){
+    int result = 0;
+    Board *board = createBoard();
+    if(board == NULL) result++;
+    free(board);
+    return result;
+}
+int testLoadDeck(){
+    int result = 0;
+    Board *board = createBoard();
     Card *deck = deckFromFile("../new.txt");
-    Column columns[7];
-    for (int i = 0; i < 7; i++) {
-        columns[i].head = NULL;
-        columns[i].tail = NULL;
-        columns[i].size = 0;
-    }
-    Column foundations[4];
-    for (int i = 0; i < 4; i++) {
-        foundations[i].head = NULL;
-        foundations[i].tail = NULL;
-        foundations[i].size = 0;
-    }
-    int columnCount[7] = {1,6,7,8,9,10,11};
-    int i = 0;
-    Card *topCard = deck;
-    while(i < 7 && topCard != NULL && columnCount[i]){
-        deck = deck->nextCard;
-        addToColumn(&columns[i],topCard);
-        topCard = deck;
-        columnCount[i]--;
-        if(columnCount[i] == 0) {
-            i++;
+    loadDeck(board, deck);
+    for(int i = 0; i < 7; i++){
+        if(board->column[i].size < 1) {
+            printf("\nCOLUMN %d SIZE %d", i ,board->column[i].size);
+            result++;
         }
     }
-    //SETUP DONE
+    for(int j = 0; j < 7; j++){
+        while(board->column[j].head != NULL){
+            Card *tmp = board->column[j].head->nextCard;
+            free(board->column[j].head);
+            board->column[j].head = tmp;
+        }
+    }
+    free(board);
+    return result;
+}
+int testClearBoard(){
+    int result = 0;
+    Board *board = createBoard();
+    Card *deck = deckFromFile("../new.txt");
+    loadDeck(board, deck);
+    clearBoard(board);
+    for(int i = 0; i < 7; i++){
+        if(board->column[i].size) result++;
+    }
+    free(board);
+    return result;
+}
+
+void testPrintBoard() {
+    //SETUP
+    Board *board = createBoard();
+    Card *deck = deckFromFile("../new.txt");
+    loadDeck(board,deck);
 
     //TEST PRINT
-    printBoard(columns,foundations);
+    printBoard(board);
 
     //TEARDOWN
-    free(topCard);
-    for(int j = 0; j < 7; j++){
-        while(columns[j].head != NULL){
-            Card *tmp = columns[j].head->nextCard;
-            free(columns[j].head);
-            columns[j].head = tmp;
-        }
-    }
+    clearBoard(board);
+    printf("\n");
+    printBoard(board);
+    free(board);
 }
+
 void testPrintGameConsole(){
     char *lastCommand = "LD";
     char *message = "OK";
     printGameConsole(lastCommand,message);
+}
+int testBoard(){
+    int result = 0;
+    result += testCreateBoard();
+    result += testLoadDeck() * 10;
+    result += testClearBoard() * 100;
+    return result;
 }

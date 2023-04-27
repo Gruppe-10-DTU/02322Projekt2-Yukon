@@ -4,19 +4,19 @@
 #include "filehandler.h"
 
 Card *deckFromFile(char *filename){
-    Card *deck;
+    Card *deck = NULL;
     FILE *file = NULL;
-    char *path = "C:\\Users\\asbpo\\CLionProjects\\02322Projekt2-Yukon\\new.txt";
-    char str[3];
+    char *path = filename;//"C:\\Users\\asbpo\\CLionProjects\\02322Projekt2-Yukon\\new.txt";
+    char str[4];
     file = fopen (path, "r");
     if(file == NULL){
         printf("error");
         return NULL;
     }
 
-    while (fgets(str, 2, file) != NULL){
-        printf(&str[0]);
-        printf(&str[1]);
+    while (fgets(str, 4, file) != NULL){
+        //printf("%c",str[0]);
+        //printf("%c\n",str[1]);
 
         addCard(&deck, str[1], str[0]);
     }

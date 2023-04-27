@@ -62,8 +62,8 @@ void testPrintBoard() {
 }
 
 void testPrintGameConsole(){
-    char *lastCommand = "LD";
-    char *message = "OK";
+    char *lastCommand = "TEST";
+    char *message = "TEST";
     printGameConsole(lastCommand,message);
 }
 int testBoard(){

@@ -19,6 +19,19 @@ void addCard(Card **head,char suit, char order){
     }
 };
 
+void freeDeck(Card *head){
+    Card *tmp;
+    while (head != NULL){
+        tmp = head->nextCard;
+        free(head);
+        head = tmp;
+    }
+}
+
+
+
+
+
 
 
 

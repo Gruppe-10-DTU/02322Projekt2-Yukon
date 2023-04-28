@@ -12,10 +12,11 @@ typedef struct {
     Card *tail;
 } Column;
 
-void appendCard(Column **pColumn, Card **pCard);
+void addToColumn(Column *pColumn, Card *pCard);
+void appendToColumn(Column *pColumn, Card *pCard);
 
-void moveCard(Column **From, Column **To, Card *mvCard);
+void moveCard(Column *From, Column *To, Card *mvCard);
 
-int moveIsValid(Card *mvCard, Column **to, int toFoundation);
+int moveIsValid(Card *mvCard, Column *to, int toFoundation);
 
 #endif //INC_02322PROJEKT2_YUKON_COLUMN_H

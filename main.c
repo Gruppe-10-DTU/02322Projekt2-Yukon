@@ -13,8 +13,16 @@ int main(){
     //Reader
 
     //Nyt deck
-    Card *deck = deckFromFile("invalidDeckTooManyCards.txt");
-    deck = deckFromFile("invalidDeckDublicateCards.txt");
-
+    Card *deck = deckFromFile("new.txt");
+    shuffle(&deck);
+    int counter = 0;
+    Card *tmp;
+    while (deck != NULL && counter < 60){
+        tmp = deck->nextCard;
+        //printf("%c%c \r\n", tmp->order, tmp->suit);
+        deck = tmp;
+        counter++;
+    }
+    printf("%d", counter);
     return 0;
 }

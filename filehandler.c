@@ -13,7 +13,7 @@ Card *deckFromFile(char *filename){
     char str[4];
     file = fopen (path, "r");
     if(file == NULL){
-        printf("error");
+        printf("File doesn't exist");
         return NULL;
     }
     int i;

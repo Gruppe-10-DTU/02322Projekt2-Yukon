@@ -11,18 +11,20 @@
  *
  * @author Philip Astrup Cramer
  */
-void addToColumn(Column **pColumn, Card **pCard){
-    if ((*pColumn)->tail == NULL && (*pColumn)->head == NULL) {
-        (*pColumn)->tail = (*pCard);
-        (*pColumn)->head = (*pCard);
+void addToColumn(Column *pColumn, Card *pCard){
+    if ((pColumn)->tail == NULL && (pColumn)->head == NULL) {
+        (pColumn)->tail = (pCard);
+        (pColumn)->head = (pCard);
+        pCard->prevCard = NULL;
+        pCard->nextCard = NULL;
     } else {
-        Card *prevHead = (*pColumn)->head;
-        prevHead->prevCard = (*pCard);
-        (*pCard)->nextCard = prevHead;
-        (*pColumn)->head = (*pCard);
-        (*pCard)->prevCard = NULL;
+        Card *prevHead = (pColumn)->head;
+        prevHead->prevCard = (pCard);
+        (pCard)->nextCard = prevHead;
+        (pColumn)->head = (pCard);
+        (pCard)->prevCard = NULL;
     }
-    (*pColumn)->size += 1;
+    (pColumn)->size += 1;
 }
 
 
@@ -33,17 +35,19 @@ void addToColumn(Column **pColumn, Card **pCard){
  *
  * @author Philip Astrup Cramer
  */
-void appendToColumn(Column **pColumn, Card **pCard) {
-    if ((*pColumn)->tail == NULL && (*pColumn)->head == NULL) {
-        (*pColumn)->tail = (*pCard);
-        (*pColumn)->head = (*pCard);
+void appendToColumn(Column *pColumn, Card *pCard) {
+    if ((pColumn)->tail == NULL && (pColumn)->head == NULL) {
+        (pColumn)->tail = (pCard);
+        (pColumn)->head = (pCard);
+        pCard->prevCard = NULL;
+        pCard->nextCard = NULL;
     } else {
-        Card *lastCard = (*pColumn)->tail;
-        lastCard->nextCard = (*pCard);
-        (*pCard)->prevCard = lastCard;
-        (*pColumn)->tail = (*pCard);
+        Card *lastCard = (pColumn)->tail;
+        lastCard->nextCard = (pCard);
+        (pCard)->prevCard = lastCard;
+        (pColumn)->tail = (pCard);
     }
-    (*pColumn)->size += 1;
+    (pColumn)->size += 1;
 }
 
 /**
@@ -54,8 +58,8 @@ void appendToColumn(Column **pColumn, Card **pCard) {
  *
  * @author Philip Astrup Cramer
  */
-void moveCard(Column **from, Column **to, Card *mvCard){
-    Card *current = (*from)->head;
+void moveCard(Column *from, Column *to, Card *mvCard){
+    Card *current = (from)->head;
     int mvCount = 1;
     //Iterates through the 'from' column until match or end is found
     while(current->suit != mvCard->suit && current->order != mvCard->order){
@@ -64,22 +68,22 @@ void moveCard(Column **from, Column **to, Card *mvCard){
         if(current == NULL) return;
     }
     //updates the head of the 'from' column
-    (*from)->head = current->nextCard;
-    if((*from)->head == NULL){
-        (*from)->tail = NULL;
+    (from)->head = current->nextCard;
+    if((from)->head == NULL){
+        (from)->tail = NULL;
     }else {
-        (*from)->head->prevCard = NULL;
+        (from)->head->prevCard = NULL;
     }
-    (*from)->size -= mvCount;
+    (from)->size -= mvCount;
 
     //Moves the card and finds new head of the column
-    current->nextCard = (*to)->head;
-    if((*to)->tail == NULL) (*to)->tail = current;
+    current->nextCard = (to)->head;
+    if((to)->tail == NULL) (to)->tail = current;
     while(current->prevCard != NULL){
         current = current->prevCard;
     }
-    (*to)->head = current;
-    (*to)->size += mvCount;
+    (to)->head = current;
+    (to)->size += mvCount;
 }
 
 /**
@@ -90,14 +94,14 @@ void moveCard(Column **from, Column **to, Card *mvCard){
  *
  * @author Philip Astrup Cramer
  */
-int moveIsValid(Card **mvCard, Column **to, int toFoundation){
-    if(!((*mvCard)->visible)) return 0;
-    char mvSuit = (*mvCard)->suit;
-    char mvOrder = (*mvCard)->order;
-    if ((*to)->head == NULL && ((toFoundation && mvOrder == 'A') || (!toFoundation && mvOrder == 'K'))) return 1;
-    else if ((*to)->head == NULL) return 0;
-    char toSuit = (*to)->head->suit;
-    char toOrder = (*to)->head->order;
+int moveIsValid(Card *mvCard, Column *to, int toFoundation){
+    if(!((mvCard)->visible)) return 0;
+    char mvSuit = (mvCard)->suit;
+    char mvOrder = (mvCard)->order;
+    if ((to)->head == NULL && ((toFoundation && mvOrder == 'A') || (!toFoundation && mvOrder == 'K'))) return 1;
+    else if ((to)->head == NULL) return 0;
+    char toSuit = (to)->head->suit;
+    char toOrder = (to)->head->order;
     int direction = 1;
     if(toFoundation) direction *= -1;
     if((mvSuit != toSuit) ^ (toFoundation)){                        // if to foundation suit's cant match

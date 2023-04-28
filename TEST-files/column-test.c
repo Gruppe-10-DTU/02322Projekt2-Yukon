@@ -30,14 +30,14 @@ int testAddToColumn() {
     //SETUP FINISHED
 
     //TEST 1
-    addToColumn(&column1, &testcard1);
+    addToColumn(column1, testcard1);
     if (column1->head == NULL) result++;//printf("\tTEST 1: Didn't update head\n");
     if (column1->tail == NULL) result++;//printf("\tTEST 1: Didn't update Tail\n");
     if (column1->size == 0) result++;//printf("\tTEST 1: Didn't update size\n");
     //else printf("\tTEST 1: Success!\n");
 
     //TEST 2
-    addToColumn(&column1, &testcard2);
+    addToColumn(column1, testcard2);
     if (column1->head == testcard1) result++;//printf("\tTEST 2: Didn't update head\n");
     if (testcard1->prevCard != testcard2 || testcard2->nextCard != testcard1) result++;//printf("\tTEST 2: Didn't link cards\n");
     if (column1->size == 1) result++;//printf("\tTEST 2: Didn't update size\n");
@@ -78,14 +78,14 @@ int testAppendToColumn(){
     //SETUP FINISHED
 
     //TEST
-    appendToColumn(&column1, &testcard1);
+    appendToColumn(column1, testcard1);
     if (column1->head == NULL) result++;//printf("\tTEST 1: Didn't update head\n");
     if (column1->tail == NULL) result++;//printf("\tTEST 1: Didn't update Tail\n");
     if (column1->size == 0) result++;//printf("\tTEST 1: Didn't update size\n");
     //else printf("\tTEST 1: Success!\n");
 
     //TEST 2
-    appendToColumn(&column1, &testcard2);
+    appendToColumn(column1, testcard2);
     if (column1->tail == testcard1) result++;//printf("\tTEST 2: Didn't update tail\n");
     if (testcard1->nextCard != testcard2 || testcard2->prevCard != testcard1) result++;//printf("\tTEST 2: Didn't link cards\n");
     if (column1->size == 1) result++;//printf("\tTEST 2: Didn't update size\n");
@@ -159,11 +159,11 @@ int testMoveCard(){
     foundation->head = NULL;
     foundation->tail = NULL;
 
-    appendToColumn(&column1, &queenSpades);
-    appendToColumn(&column1, &kingHearts);
-    appendToColumn(&column2, &aceClubs);
-    appendToColumn(&column2, &jackHearts);
-    appendToColumn(&column3,&twoClubs);
+    appendToColumn(column1, queenSpades);
+    appendToColumn(column1, kingHearts);
+    appendToColumn(column2, aceClubs);
+    appendToColumn(column2, jackHearts);
+    appendToColumn(column3,twoClubs);
     //SETUP FINISHED
 
 
@@ -172,7 +172,7 @@ int testMoveCard(){
     Card *c1HeadBeforeMove = column1->head;
     int c2SizeBeforeMove = column2->size;
     Card *c2HeadBeforeMove = column2->head;
-    moveCard(&column2,&column1,jackHearts);
+    moveCard(column2,column1,jackHearts);
     if (c1SizeBeforeMove == column1->size || c1HeadBeforeMove == column1->head) result++;//printf("\tTEST 1: Updating 'to' column failed\n");
     if (c2HeadBeforeMove == column2->head || c2SizeBeforeMove == column2->size) result++;//printf("\tTEST 1: Updating 'from' column failed\n");
     //else printf("\tTEST 1: Success\n");
@@ -182,7 +182,7 @@ int testMoveCard(){
     c1SizeBeforeMove = column1->size;
     int fSizeBeforeMove = foundation->size;
     Card *fHeadBeforeMove = foundation->head;
-    moveCard(&column1, &foundation, aceClubs);
+    moveCard(column1, foundation, aceClubs);
     if (fSizeBeforeMove == foundation->size || fHeadBeforeMove == foundation->head) result++;//printf("\tTEST 2: Updating 'to' column failed\n");
     if (c1SizeBeforeMove == column1->size || c1HeadBeforeMove == column1->head) result++;//printf("\tTEST 2: Updating 'from' column failed\n");
     //else printf("\tTEST 2: Success\n");
@@ -262,17 +262,17 @@ int testMoveIsValid(){
     foundation->head = NULL;
     foundation->tail = NULL;
 
-    appendToColumn(&column1, &queenSpades);
-    appendToColumn(&column1, &kingHearts);
-    appendToColumn(&column2, &aceClubs);
-    appendToColumn(&column2, &jackHearts);
+    appendToColumn(column1, queenSpades);
+    appendToColumn(column1, kingHearts);
+    appendToColumn(column2, aceClubs);
+    appendToColumn(column2, jackHearts);
     //SETUP FINISH
 
     //TEST
-    if (!(moveIsValid(&jackHearts, &column1, 0))) result++;//printf("\tFailed column check 1\n");
-    if (!(moveIsValid(&aceClubs, &foundation, 1))) result++;//printf("\tFailed foundation check\n");
-    if (!(moveIsValid(&jackHearts, &column1, 0))) result++;//printf("\tFailed column check 2\n");
-    if (!(moveIsValid(&kingHearts, &column3, 0))) result++;//printf("\tFailed move to empty column check\n");
+    if (!(moveIsValid(jackHearts, column1, 0))) result++;//printf("\tFailed column check 1\n");
+    if (!(moveIsValid(aceClubs, foundation, 1))) result++;//printf("\tFailed foundation check\n");
+    if (!(moveIsValid(jackHearts, column1, 0))) result++;//printf("\tFailed column check 2\n");
+    if (!(moveIsValid(kingHearts, column3, 0))) result++;//printf("\tFailed move to empty column check\n");
     //else printf("\tSuccess!\n");
 
     //TEARDOWN

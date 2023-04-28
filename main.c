@@ -3,9 +3,12 @@
 //
 #include "filehandler.h"
 #include "deck.h"
+#include "board.h"
 
 int main(){
     //Terminal input/output
+    clearView();
+    printTitle();
 
     //Reader
 

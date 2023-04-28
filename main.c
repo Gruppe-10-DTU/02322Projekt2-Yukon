@@ -13,8 +13,8 @@ int main(){
     //Reader
 
     //Nyt deck
-    Card *deck = newDeck();
-    //j
+    Card *deck = deckFromFile("invalidDeckTooManyCards.txt");
+    deck = deckFromFile("invalidDeckDublicateCards.txt");
 
     return 0;
 }

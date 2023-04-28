@@ -19,7 +19,7 @@ Card *deckFromFile(char *filename){
     int i;
     while (fgets(str, 4, file) != NULL){
         i = 0;
-        if(deckIsValid(deck, str[1], str[0], &i) == 0){
+        if(deckIsValid(deck, str[1], str[0], i) == 0){
             freeDeck(deck);
             deck = NULL;
             break;
@@ -61,7 +61,7 @@ Card *newDeck(){
     return deckFromFile("new.txt");
 }
 
-int deckIsValid(Card *card, char suit, char order, int *counter){
+int deckIsValid(Card *card, char suit, char order, int counter){
     if(card == NULL){
         return 1;
     }else if(card->order == order && card->suit == suit) {

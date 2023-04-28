@@ -6,8 +6,11 @@
 Card *deckFromFile(char *filename){
     Card *deck;
     FILE *file = NULL;
-    char *path = "C:\\Users\\asbpo\\CLionProjects\\02322Projekt2-Yukon\\new.txt";
-    char str[3];
+    char *path = malloc(strlen(filename) + 6);
+
+    sprintf(path,"..%s", filename);
+
+    char str[4];
     file = fopen (path, "r");
     if(file == NULL){
         printf("error");

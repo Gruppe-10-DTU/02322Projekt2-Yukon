@@ -19,6 +19,16 @@ void addCard(Card **head,char suit, char order){
 };
 
 
+Card* findCard(Card* cards, char suit, char order){
+    while(cards != NULL){
+        if(cards->order == order && cards->suit == suit){
+            return cards;
+        }
+        cards = cards->nextCard;
+    }
+    return NULL;
+}
+
 
 
 

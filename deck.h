@@ -16,5 +16,6 @@ typedef struct card{
 }Card;
 
 void addCard(Card **head, char suit, char order);
+Card* findCard(Card* cards, char suit, char order);
 
 #endif //INC_02322PROJEKT2_YUKON_DECK_H

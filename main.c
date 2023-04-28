@@ -4,9 +4,15 @@
 #include "filehandler.h"
 #include "deck.h"
 #include "board.h"
+#include "board.h"
 #include "column.h"
 
 int main(){
+    //Terminal input/output
+    clearView();
+    printTitle();
+
+    //Reader
     //SETUP START
     Card *deck = deckFromFile("../new.txt");
     Column columns[7];
@@ -33,13 +39,9 @@ int main(){
     //TEST PRINT
     printBoard(columns,foundations);
 
-    //TEARDOWN
-    for(int j = 0; j < 7; j++){
-        while(columns[j].head != NULL){
-            Card *tmp = columns[j].head->nextCard;
-            free(columns[j].head);
-            columns[j].head = tmp;
-        }
-    }
+    //Nyt deck
+    Card *deck = newDeck();
+    //j
+
     return 0;
 }

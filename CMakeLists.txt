@@ -21,5 +21,5 @@ set(Test_Source_Files
         TEST-files/column-test.c
         ${Sources} TEST-files/board-test.c)
 set(Test_Headers
-        TEST-files/column-test.h TEST-files/board-test.c TEST-files/board-test.h)
+        TEST-files/column-test.h TEST-files/board-test.c TEST-files/board-test.h command.c)
 add_executable(Yukon_Test ${Test_Source_Files} ${Headers} ${Test_Headers})

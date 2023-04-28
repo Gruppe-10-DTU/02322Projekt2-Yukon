@@ -7,10 +7,36 @@
 #include "board.h"
 #include "column.h"
 #include "stdio.h"
+#include "string.h"
 
 
 void startGame(Board* board){
-    //DOES NOTHING FOR NOW WIP.
+        char* moveCmd = (char*)malloc(sizeof(moveCmd));
+        char* lastMove = (char*) malloc(sizeof moveCmd);
+        lastMove = NULL;
+        char *mvf = (char*) malloc(sizeof 10);
+        char *mvt = (char*) malloc(sizeof 10);
+        int mcf;
+        int mct;
+        while(1){
+            printBoard(board);
+            printGameConsole(lastMove,fgets(moveCmd,sizeof(moveCmd),stdin));
+            if(strcmp(moveCmd,"Q")){
+                printf("%s", "Exiting game...");
+                break;
+            }
+            if(strcmp(&moveCmd[2],":") == 0){
+                strtok()
+            }else if(strcmp(&moveCmd[2], "-") == 0){
+
+            }else{
+                //Could do something here if we wanted to.
+            }
+
+                    mvf = strtok(moveCmd,);
+            *mvt = strtok(moveCmd,">");
+            if(moveIsValid(findCard()))
+        }
 }
 
 

@@ -19,6 +19,9 @@ typedef struct{
 }Command;
 
 
-void playCommand(Board *board,char *str);
 
 void addCommand(Command **head, char *moveTo, char *moveFrom, char *card);
+
+void playCommand(Board *board,char *str);
+
+int doCommand(Board *board, Command *com, char fromForC, char toForC);

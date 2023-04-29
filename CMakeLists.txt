@@ -7,12 +7,14 @@ set(Headers
         deck.h
         board.h
         column.h
-        filehandler.h)
+        filehandler.h
+        command.h)
 set(Sources
         board.c
         column.c
         filehandler.c
-        deck.c)
+        deck.c
+        command.c)
 add_executable(02322Projekt2-Yukon main.c ${Sources} ${Headers})
 
 

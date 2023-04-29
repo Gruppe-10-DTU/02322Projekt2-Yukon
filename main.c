@@ -9,28 +9,53 @@
 #include "stdio.h"
 #include "string.h"
 #include "command.h"
+#include <unistd.h>
 
+int hasWon(Board *board){
+    int size = 0;
+    for (int i = 0; i < 4; ++i) {
+        size += board->foundation[i].size;
+    }
+    if(size == 52)
+        return 1;
+    else
+        return 0;
+}
 
 void startGame(Board* board){
-        Command *cmd;
-        char* moveCmd = (char*)malloc(sizeof(moveCmd));
-        char* lastMove = (char*) malloc(sizeof moveCmd);
+        Command *cmd = NULL;
+        char *moveCmd = (char*)malloc(sizeof(moveCmd));
+        char *lastMove = (char*) malloc(sizeof moveCmd);
+        char *status = (char*) malloc(sizeof status);
         lastMove = NULL;
-        while(1){
+        status = "OK";
+        while(hasWon(board) != 1){
             printBoard(board);
-            printGameConsole(lastMove,fgets(moveCmd,sizeof(moveCmd),stdin));
-            if(strcmp(moveCmd,"Q")){
+            printGameConsole(lastMove,status);
+            scanf("%s",moveCmd);
+            if(strcmp(moveCmd,"Q") == 0){
                 printf("%s", "Exiting game...");
                 break;
             }
             if(strcmp(&moveCmd[2],":") == 0 || strcmp(&moveCmd[2], "-") == 0){
                 playCommand(board, moveCmd);
-                if(moveIsValid(findCard(board.)))
+                int doable = doCommand(board,cmd,cmd->moveFrom[0],cmd->moveTo[0]);
+                if(doable == 1){
+                    lastMove = moveCmd;
+                    status = "OK";
+                }else if(doable == 0){
+                    status = "ERROR";
+                }
             }else{
                 //Could do something here if we wanted to.
             }
-
         }
+        usleep(2000000);
+        free(moveCmd);
+        free(lastMove);
+        clearView();
+        printWin();
+        usleep(2000000);
 }
 
 
@@ -61,11 +86,8 @@ int main() {
     while (1) {
         printTitle();
         scanf("%s", cmd);
-        char *split = strtok(cmd, "<");
-        cmdS1 = split;
-        split = strtok("<",cmd);
-        cmdS2 = split;
-        if(strcmp(cmdS1,"P") == 0){
+        if(strcmp(cmd,"P") == 0){
+            loadDeck(board,deck);
             startGame(board);
         }
         else if(strcmp(cmdS1,"LD") == 0){

@@ -12,8 +12,7 @@
 
 
 void addCommand(Command **head, char *moveTo, char *moveFrom, char *card){
-    Command *cmd;
-    cmd = (char*) malloc(sizeof cmd);
+    Command *cmd = NULL;
     cmd->moveTo = moveTo;
     cmd->moveFrom = moveFrom;
     cmd->card = card;
@@ -42,13 +41,15 @@ void playCommand(Board *board,char *str){
         char *from = strtok(tmp, "-");
         char *to = strtok(NULL, "-");
         char *card = NULL;
-        if(strcmp(&from[0],"C")) {
+        if(strcmp(&from[0],"C") == 0) {
             for (int i = 0; i < 7; i++) {
                 if (from[1] == i) {
                     char *tmp1 = &board->column[i].tail->order;
                     char *tmp2 = &board->column[i].tail->suit;
                     strcat(card, tmp1);
                     strcat(card, tmp2);
+                    free(tmp1);
+                    free(tmp2);
                     break;
                 }
             }
@@ -58,8 +59,11 @@ void playCommand(Board *board,char *str){
                 if(from[1] == i){
                     char *tmp1 = &board->foundation[i].tail->order;
                     char *tmp2 = &board->foundation[i].tail->suit;
-                    strcat(card,tmp1);
                     strcat(card,tmp2);
+                    strcat(card,tmp1);
+                    free(tmp1);
+                    free(tmp2);
+                    break;
                 }
             }
         }
@@ -73,4 +77,35 @@ void playCommand(Board *board,char *str){
     }else{
         //Should return NULL if it is not a valid Command
     }
+}
+
+int doCommand(Board *board, Command *com, char fromForC, char toForC) {
+    int toReturn = 0;
+    if (fromForC == 'F') {
+        if (moveIsValid(findCard(board->foundation[(int) com->moveFrom[1]].head, com->card[0], com->card[1]),
+                        &board->column[(int) com->moveTo[1]], 0) == 1) {
+            moveCard(&board->foundation[(int) com->moveFrom[1]], &board->column[(int) com->moveTo[1]],
+                     findCard(board->foundation->head, com->card[0], com->card[1]));
+            toReturn = 1;
+        }
+    }else{
+        if(toForC == 'C'){
+            if (moveIsValid(
+                    findCard(board->column[(int) com->moveFrom[1]].head, com->card[0], com->card[1]),
+                    &board->column[(int) com->moveTo[1]], 0) == 1) {
+                moveCard(&board->column[(int) com->moveFrom[1]], &board->column[(int) com->moveTo[1]],
+                         findCard(board->column[(int) com->moveFrom[1]].head, com->card[0], com->card[1]));
+                toReturn = 1;
+            }
+        }else if(toForC == 'F'){
+            if (moveIsValid(
+                    findCard(board->column[(int) com->moveFrom[1]].head, com->card[0], com->card[1]),
+                    &board->foundation[(int) com->moveTo[1]],1) == 1) {
+                moveCard(&board->column[(int) com->moveFrom[1]], &board->foundation[(int) com->moveTo[1]],
+                         findCard(board->column[(int) com->moveFrom[1]].head, com->card[0], com->card[1]));
+                toReturn = 1;
+            }
+        }
+    }
+    return toReturn;
 }

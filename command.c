@@ -70,8 +70,6 @@ Command *playCommand(Board *board,char *str){
 
     }else if(strcmp(str, "REDO") == 0 || strcmp(str,"redo") == 0){
 
-    }else{
-        //Should return NULL if it is not a valid Command
     }
     return cmd;
 }

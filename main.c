@@ -44,17 +44,14 @@ void startGame(Board* board) {
             if (doable == 1) {
                 lastMove = moveCmd;
                 status = "OK";
-                free(moveCmd);
             } else if (doable == 0) {
                 status = "Invalid Move";
-                free(moveCmd);
             }
         } else {
             //Could do something here if we wanted to.
         }
     }
     usleep(2000000);
-    free(moveCmd);
     free(lastMove);
     clearView();
     if (hasWon(board) == 1) {

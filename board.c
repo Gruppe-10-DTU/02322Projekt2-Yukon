@@ -95,7 +95,7 @@ void printBoard(Board *board){
         if(lineCount < 7 && lineCount % 2 == 0){
             printf("\t");
             if(foundations[lineCount / 2].head != NULL){
-                printf("%c%c", foundations[rowCount / 2].head->order, foundations[rowCount / 2].head->suit);
+                printf("%c%c", foundations[lineCount / 2].head->order, foundations[lineCount / 2].head->suit);
             } else{
                 printf("[]");
             }

@@ -34,6 +34,10 @@ void loadDeck(Board *board, Card *deck){
     while(i < 7 && topCard != NULL && columnCount[i]){
         deck = deck->nextCard;
         addToColumn(&board->column[i],topCard);
+        if(columnCount[i] <= 5){
+            topCard->visible = 1;
+        }
+
         topCard = deck;
         columnCount[i]--;
         if(columnCount[i] == 0) {
@@ -73,7 +77,7 @@ void printBoard(Board *board){
     }
     int allDone = 0;
     int lineCount = 0;
-    while(!allDone && lineCount < 7){
+    while(!allDone || lineCount < 7){
         int rowCount = 0;
         while (rowCount < 7){
             if(indexLine[rowCount] == NULL){
@@ -87,7 +91,7 @@ void printBoard(Board *board){
             }
             rowCount++;
         }
-        if(lineCount % 2 == 0){
+        if(lineCount < 7 && lineCount % 2 == 0){
             printf("\t");
             if(foundations[lineCount / 2].head != NULL){
                 printf("%c%c", foundations[rowCount / 2].head->order, foundations[rowCount / 2].head->suit);
@@ -98,7 +102,7 @@ void printBoard(Board *board){
         }
         printf("\n");
         lineCount++;
-        if(lineCount== 7) allDone = 1;
+        allDone = 1;
         for(int j = 0; j < 7; j++){
             if (indexLine[j] != NULL) allDone = 0;
         }

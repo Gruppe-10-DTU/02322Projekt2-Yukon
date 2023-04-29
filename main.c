@@ -26,17 +26,9 @@ int main() {
 
     //Nyt deck
     Card *deck = deckFromFile("new.txt");
-    shuffle(&deck);
-    int counter = 0;
-    Card *tmp;
-    while (deck != NULL && counter < 60){
-        tmp = deck->nextCard;
-        //printf("%c%c \r\n", tmp->order, tmp->suit);
-        deck = tmp;
-        counter++;
-    }
-    printf("%d", counter);
-    Board *board = createBoard();
+    split(&deck, 0);
+    split(&deck, 52);
+    split(&deck, 26);
 
     while (1) {
         printTitle();
@@ -46,12 +38,12 @@ int main() {
         split = strtok("<",cmd);
         cmdS2 = split;
         if(strcmp(cmdS1,"P") == 0){
-            startGame(board);
+            //startGame(board);
         }
         else if(strcmp(cmdS1,"LD") == 0){
             deck = deckFromFile(cmdS2);
-            loadDeck(board,deck);
-            printBoard(board);
+            //loadDeck(board,deck);
+            //printBoard(board);
         }
         else if(strcmp(cmdS1,"SW") == 0){
 

@@ -96,73 +96,41 @@ void freeDeck(Card *head){
     }
 }
 
-int countDeck(Card *head){
-    int counter = 1;
-    Card *item = head;
-    while(item->nextCard != NULL){
-        counter++;
-        item = item->nextCard;
-    }
-    return counter;
-}
-
-void shuffle(Card **head){
-    int placementMax, placementCurrent;
-    Card *whileLoopCard, *tmp, *shuffledDeck, *placeholder, *nextCard;
-    if(head == NULL){
+/**
+ * Splits the deck based on a split index.
+ * @param head The deck you want split
+ * @param splitIndex The size of the first bunk. Set -1 if you want it done randomly.
+ * If set to 0 or 52, it will just return the deck unchanged.
+ */
+void split(Card **head, int splitIndex){
+    Card *firstDeck = *head, *secondDeck = firstDeck, *shufflePile;
+    if(splitIndex == -1){
+        splitIndex = (rand() % (52));
+    }else if(splitIndex == 0 || splitIndex == 52 || head == NULL){
         return;
     }
-    //Int that says how many places a card can be
-    placementMax = 1;
-
-    //Set shuffledDeck to the first card in head
-    shuffledDeck = *head;
-    whileLoopCard = shuffledDeck->nextCard;
-    shuffledDeck->nextCard = NULL;
-
-    while(whileLoopCard != NULL){
-        nextCard = whileLoopCard->nextCard;
-        //whileLoopCard->nextCard = NULL;
-        //whileLoopCard->prevCard = NULL;
-        //Find the place for the card based on how many cards are placed.
-        //The shuffle always start with one card
-        placementCurrent =  (rand() % (placementMax+1));
-
-        //If placementCurrent is 0, add it to the start
-        if(placementCurrent == 0){
-            whileLoopCard->nextCard = shuffledDeck;
-            shuffledDeck->prevCard = whileLoopCard;
-            whileLoopCard->prevCard = NULL;
-            shuffledDeck = whileLoopCard;
-        }else{
-            placeholder = shuffledDeck;
-
-            //Get the pointer where nextCard is the placement
-            for (int i = 1; i< placementCurrent; i++){
-                placeholder = placeholder->nextCard;
-            }
-            if(placeholder->nextCard == NULL){
-                placeholder->nextCard = whileLoopCard;
-                whileLoopCard->prevCard = placeholder;
-                whileLoopCard->nextCard = NULL;
-            }else{
-                //Break the linked list and put in the card.
-                tmp = placeholder->nextCard;
-                tmp->prevCard = whileLoopCard;
-                placeholder->nextCard = whileLoopCard;
-                whileLoopCard->nextCard = tmp;
-                whileLoopCard->prevCard = placeholder;
-            }
-        }
-        whileLoopCard = nextCard;
-        placementMax++;
+    for (int i = 0; i < splitIndex; ++i) {
+        secondDeck = secondDeck->nextCard;
     }
-
-    *head = shuffledDeck;
-}
-
-void split(int splitIndex){
-
+    shufflePile = firstDeck;
+    shufflePile->prevCard = NULL;
+    firstDeck = firstDeck->nextCard;
+    while(firstDeck != NULL && secondDeck != NULL){
+        shufflePile->nextCard = secondDeck;
+        secondDeck->prevCard = shufflePile;
+        shufflePile = secondDeck;
+        secondDeck = secondDeck->nextCard;
+        shufflePile->nextCard = firstDeck;
+        firstDeck->prevCard = shufflePile;
+        shufflePile = firstDeck;
+        firstDeck = firstDeck->nextCard;
+    }
+    if(firstDeck == NULL){
+        shufflePile->nextCard = secondDeck;
+    }else{
+        shufflePile->nextCard = firstDeck;
+    }
+    *head = shufflePile;
 }
 
 

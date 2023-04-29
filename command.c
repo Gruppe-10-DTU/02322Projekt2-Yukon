@@ -11,45 +11,66 @@
 #include "board.h"
 
 
-void doCommand(char *moveTo, char *moveFrom, char *card){
-    command *cmd;
+void addCommand(Command **head, char *moveTo, char *moveFrom, char *card){
+    Command *cmd;
     cmd = (char*) malloc(sizeof cmd);
     cmd->moveTo = moveTo;
     cmd->moveFrom = moveFrom;
     cmd->card = card;
-    cmd->nextCommand = NULL;
     cmd->prevCommand = NULL;
+    if (*head == NULL){
+        *head = cmd;
+        cmd->nextCommand = NULL;
+    } else{
+        cmd->nextCommand = *head;
+        (*head)->prevCommand = cmd;
+        *head = cmd;
+    }
 };
 
 void playCommand(Board *board,char *str){
+    Command *cmd = NULL;
     char *tmp = strdup(str);
     if(strcmp(&str[2],":") == 0) {
-        char *coulFro = strtok(tmp, ":");
+        char *from = strtok(tmp, ":");
         char *card = strtok(NULL,":");
-        char *coulTo = strtok(NULL, "");
-        doCommand(coulTo, coulFro, card);
+        char *to = strtok(NULL, "");
+        addCommand(&cmd, to, from, card);
         free(tmp);
     }
     else if(strcmp(&str[2], "-") == 0){
-        char *coulFro = strtok(tmp,"-");
-        char *coulTo = strtok(NULL,"-");
+        char *from = strtok(tmp, "-");
+        char *to = strtok(NULL, "-");
         char *card = NULL;
-        for(int i = 0; i < board->column; i++){
-            if(coulFro[1] == i) {
-                char *tmp1 = &board->column[i].tail->order;
-                char *tmp2 = &board->column[i].tail->suit;
-                strcat(card,tmp1);
-                strcat(card,tmp2);
-                break;
+        if(strcmp(&from[0],"C")) {
+            for (int i = 0; i < 7; i++) {
+                if (from[1] == i) {
+                    char *tmp1 = &board->column[i].tail->order;
+                    char *tmp2 = &board->column[i].tail->suit;
+                    strcat(card, tmp1);
+                    strcat(card, tmp2);
+                    break;
+                }
+            }
+        }else {
+            if(strcmp(&from[0], "F") == 0){
+            for (int i = 0; i < 4; ++i) {
+                if(from[1] == i){
+                    char *tmp1 = &board->foundation[i].tail->order;
+                    char *tmp2 = &board->foundation[i].tail->suit;
+                    strcat(card,tmp1);
+                    strcat(card,tmp2);
+                }
             }
         }
-        doCommand(coulTo,coulFro,card);
+        }
+        addCommand(&cmd, to, from, card);
         }
     else if(strcmp(str,"UNDO") == 0 || strcmp(str,"undo") == 0){
-        //Should return NULL for now.
+
     }else if(strcmp(str, "REDO") == 0 || strcmp(str,"redo") == 0){
-        //Should return NULL for now.
+
     }else{
-        //Should return NULL has it is not a valid command
+        //Should return NULL if it is not a valid Command
     }
 }

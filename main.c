@@ -8,16 +8,14 @@
 #include "column.h"
 #include "stdio.h"
 #include "string.h"
+#include "command.h"
 
 
 void startGame(Board* board){
+        Command *cmd;
         char* moveCmd = (char*)malloc(sizeof(moveCmd));
         char* lastMove = (char*) malloc(sizeof moveCmd);
         lastMove = NULL;
-        char *mvf = (char*) malloc(sizeof 10);
-        char *mvt = (char*) malloc(sizeof 10);
-        int mcf;
-        int mct;
         while(1){
             printBoard(board);
             printGameConsole(lastMove,fgets(moveCmd,sizeof(moveCmd),stdin));
@@ -25,17 +23,13 @@ void startGame(Board* board){
                 printf("%s", "Exiting game...");
                 break;
             }
-            if(strcmp(&moveCmd[2],":") == 0){
-                strtok()
-            }else if(strcmp(&moveCmd[2], "-") == 0){
-
+            if(strcmp(&moveCmd[2],":") == 0 || strcmp(&moveCmd[2], "-") == 0){
+                playCommand(board, moveCmd);
+                if(moveIsValid(findCard(board.)))
             }else{
                 //Could do something here if we wanted to.
             }
 
-                    mvf = strtok(moveCmd,);
-            *mvt = strtok(moveCmd,">");
-            if(moveIsValid(findCard()))
         }
 }
 

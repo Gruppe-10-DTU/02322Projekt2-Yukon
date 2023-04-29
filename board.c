@@ -4,6 +4,7 @@
 #include "board.h"
 #include "deck.h"
 #include "column.h"
+#include "command.h"
 #include <stdio.h>
 #include <conio.h>
 

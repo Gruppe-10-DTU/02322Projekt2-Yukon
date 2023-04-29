@@ -24,7 +24,7 @@ int hasWon(Board *board){
 
 void startGame(Board* board) {
     Command *cmd = NULL;
-    char *moveCmd = (char *) malloc(sizeof(moveCmd));
+    char *moveCmd = NULL;
     char *lastMove = (char *) malloc(sizeof moveCmd);
     char *status = (char *) malloc(sizeof status);
     lastMove = NULL;
@@ -32,19 +32,22 @@ void startGame(Board* board) {
     while (hasWon(board) != 1) {
         printBoard(board);
         printGameConsole(lastMove, status);
-        scanf("%s", moveCmd);
+        scanf("%ms", &moveCmd);
         if (strcmp(moveCmd, "Q") == 0) {
             printf("%s", "Exiting game...");
             break;
         }
-        if (strcmp(&moveCmd[2], ":") == 0 || strcmp(&moveCmd[2], "-") == 0) {
-            playCommand(board, moveCmd);
+
+        if (moveCmd[2] == ':' || moveCmd[2] == '-') {
+            cmd = playCommand(board, moveCmd);
             int doable = doCommand(board, cmd, cmd->moveFrom[0], cmd->moveTo[0]);
             if (doable == 1) {
                 lastMove = moveCmd;
                 status = "OK";
+                free(moveCmd);
             } else if (doable == 0) {
                 status = "Invalid Move";
+                free(moveCmd);
             }
         } else {
             //Could do something here if we wanted to.

@@ -25,7 +25,15 @@ Board *createBoard(){
     }
     return board;
 }
-
+int findLargestColumn(Column* cou, int columns){
+    int MAXSIZE = 0;
+    for (int i = 0; i < columns; ++i) {
+        if(cou[i].size > MAXSIZE){
+            MAXSIZE = cou->size;
+        }
+    }
+    return MAXSIZE;
+}
 void loadDeck(Board *board, Card *deck){
     int columnCount[7] = {1,6,7,8,9,10,11};
     int i = 0;
@@ -40,6 +48,20 @@ void loadDeck(Board *board, Card *deck){
             i++;
         }
     }
+    while(i < 7 && topCard != NULL && columnCount[i]){
+        deck = deck->nextCard;
+        addToColumn(&board->column[i],topCard);
+        if(columnCount[i] <= 5){
+            topCard->visible = 1;
+        }
+
+        topCard = deck;
+        columnCount[i]--;
+        if(columnCount[i] == 0) {
+            i++;
+        }
+    }
+
 }
 void clearBoard(Board *board){
     for(int j = 0; j < 7; j++){
@@ -73,7 +95,8 @@ void printBoard(Board *board){
     }
     int allDone = 0;
     int lineCount = 0;
-    while(!allDone && lineCount < 7){
+    /*
+    while(!allDone && findLargestColumn(columns,7)){
         int rowCount = 0;
         while (rowCount < 7){
             if(indexLine[rowCount] == NULL){
@@ -103,6 +126,37 @@ void printBoard(Board *board){
             if (indexLine[j] != NULL) allDone = 0;
         }
     }
+     */
+    while(!allDone){
+        int rowCount = 0;
+        while (rowCount < 7){
+            if(indexLine[rowCount] == NULL){
+                printf("\t");
+            } else if (!indexLine[rowCount]->visible){
+                printf("[]\t");
+                indexLine[rowCount] = indexLine[rowCount]->prevCard;
+            } else {
+                printf("%c%c\t", indexLine[rowCount]->order, indexLine[rowCount]->suit);
+                indexLine[rowCount] = indexLine[rowCount]->prevCard;
+            }
+            rowCount++;
+        }
+        if(lineCount < 7 && lineCount % 2 == 0){
+            printf("\t");
+            if(foundations[lineCount / 2].head != NULL){
+                printf("%c%c", foundations[rowCount / 2].head->order, foundations[rowCount / 2].head->suit);
+            } else{
+                printf("[]");
+            }
+            printf("\tF%d", (lineCount / 2) + 1);
+        }
+        printf("\n");
+        lineCount++;
+        allDone = 1;
+        for(int j = 0; j < 7; j++){
+            if (indexLine[j] != NULL) allDone = 0;
+        }
+    }
     fflush(stdin);
 }
 void printGameConsole(char *lastCommand, char *message){
@@ -110,6 +164,7 @@ void printGameConsole(char *lastCommand, char *message){
     printf("MESSAGE: %s\n",message);
     printf("INPUT >");
 }
+
 void printTitle(){
     clearView();
     printf(" __     __    _                        \n"

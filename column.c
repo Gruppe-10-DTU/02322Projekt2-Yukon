@@ -117,3 +117,5 @@ int moveIsValid(Card *mvCard, Column *to, int toFoundation){
 }
 
 
+
+

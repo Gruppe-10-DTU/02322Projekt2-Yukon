@@ -54,8 +54,11 @@ void startGame(Board* board){
         free(moveCmd);
         free(lastMove);
         clearView();
-        printWin();
-        usleep(2000000);
+        if(hasWon(board) == 1) {
+            printWin();
+            usleep(2000000);
+        }
+
 }
 
 
@@ -68,19 +71,16 @@ int main() {
     //Reader
 
     //Nyt deck
-    Card *deck = deckFromFile("new.txt");
+    //Card *deck = deckFromFile("new.txt");
+    Card *deck = newDeck();
+
     shuffle(&deck);
     int counter = 0;
     Card *tmp;
-    while (deck != NULL && counter < 60){
-        tmp = deck->nextCard;
-        //printf("%c%c \r\n", tmp->order, tmp->suit);
-        deck = tmp;
-        counter++;
-    }
     printf("%d", counter);
     Board *board = createBoard();
     while (1) {
+        clearView();
         printTitle();
         scanf("%s", cmd);
         if(strcmp(cmd,"P") == 0){
@@ -114,5 +114,7 @@ int main() {
         }
     }
     free(cmd);
+    free(board);
+    free(deck);
     return 0;
 }

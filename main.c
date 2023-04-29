@@ -44,7 +44,7 @@ void startGame(Board* board){
                     lastMove = moveCmd;
                     status = "OK";
                 }else if(doable == 0){
-                    status = "ERROR";
+                    status = "Invalid Move";
                 }
             }else{
                 //Could do something here if we wanted to.
@@ -61,8 +61,6 @@ void startGame(Board* board){
 
 int main() {
     char *cmd = (char *) malloc(sizeof(cmd));
-    char *cmdS1 = (char * ) malloc(sizeof cmdS1);
-    char *cmdS2 = (char*) malloc(sizeof cmdS2);
     //Initial Setup
     clearView();
     printTitle();
@@ -82,7 +80,6 @@ int main() {
     }
     printf("%d", counter);
     Board *board = createBoard();
-
     while (1) {
         printTitle();
         scanf("%s", cmd);
@@ -90,31 +87,32 @@ int main() {
             loadDeck(board,deck);
             startGame(board);
         }
-        else if(strcmp(cmdS1,"LD") == 0){
-            deck = deckFromFile(cmdS2);
+        else if(strcmp(cmd,"LD") == 0){
+            scanf("Enter filename: %s", cmd);
+            deck = deckFromFile(cmd);
             loadDeck(board,deck);
             printBoard(board);
         }
-        else if(strcmp(cmdS1,"SW") == 0){
+        else if(strcmp(cmd,"SW") == 0){
 
         }
-        else if(strcmp(cmdS1,"SI") == 0){
+        else if(strcmp(cmd,"SI") == 0){
 
         }
-        else if(strcmp(cmdS1,"SR") == 0){
+        else if(strcmp(cmd,"SR") == 0){
 
         }
-        else if(strcmp(cmdS1,"SD") == 0){
+        else if(strcmp(cmd,"SD") == 0){
 
         }
-        else if(strcmp(cmdS1,"QQ") == 0){
+        else if(strcmp(cmd,"QQ") == 0){
+            printf("%s","Exiting game. Goodbye!");
             break;
+
         }else{
             //TO BE IMPLEMENTED (Return error status).
         }
     }
     free(cmd);
-    free(cmdS1);
-    free(cmdS2);
     return 0;
 }

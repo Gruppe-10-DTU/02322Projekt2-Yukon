@@ -4,10 +4,11 @@
 #include "board.h"
 #include "deck.h"
 #include "column.h"
+#include <stdio.h>
+#include <conio.h>
 
 Board *createBoard(){
     Board *board = (Board *) malloc(sizeof(Board));
-
     Column columns[7];
     for (int i = 0; i < 7; i++) {
         columns[i].head = NULL;
@@ -130,7 +131,7 @@ void printTitle(){
 void printWin(){
     clearView();
     printf(
- " __   __                                                                    _         _       _   _                 _ \n"
+ " __   __                                                               _         _       _   _                 _ \n"
  " \\ \\ / /                                                                   | |       | |     | | (_)               | |\n"
  "  \\ V /___  _   _  __      _____  _ __       ___ ___  _ __   __ _ _ __ __ _| |_ _   _| | __ _| |_ _  ___  _ __  ___| |\n"
  "   \\ // _ \\| | | | \\ \\ /\\ / / _ \\| '_ \\     / __/ _ \\| '_ \\ / _` | '__/ _` | __| | | | |/ _` | __| |/ _ \\| '_ \\/ __| |\n"
@@ -144,7 +145,7 @@ void clearView(){
 #ifdef __linux__
     system("clear");
 #elif __WIN32__
-    system("clear");
+    system("cls");
 #endif
 }
 

@@ -22,45 +22,43 @@ int hasWon(Board *board){
         return 0;
 }
 
-void startGame(Board* board){
-        Command *cmd = NULL;
-        char *moveCmd = (char*)malloc(sizeof(moveCmd));
-        char *lastMove = (char*) malloc(sizeof moveCmd);
-        char *status = (char*) malloc(sizeof status);
-        lastMove = NULL;
-        status = "OK";
-        while(hasWon(board) != 1){
-            printBoard(board);
-            printGameConsole(lastMove,status);
-            scanf("%s",moveCmd);
-            if(strcmp(moveCmd,"Q") == 0){
-                printf("%s", "Exiting game...");
-                break;
-            }
-            if(strcmp(&moveCmd[2],":") == 0 || strcmp(&moveCmd[2], "-") == 0){
-                playCommand(board, moveCmd);
-                int doable = doCommand(board,cmd,cmd->moveFrom[0],cmd->moveTo[0]);
-                if(doable == 1){
-                    lastMove = moveCmd;
-                    status = "OK";
-                }else if(doable == 0){
-                    status = "Invalid Move";
-                }
-            }else{
-                //Could do something here if we wanted to.
-            }
+void startGame(Board* board) {
+    Command *cmd = NULL;
+    char *moveCmd = (char *) malloc(sizeof(moveCmd));
+    char *lastMove = (char *) malloc(sizeof moveCmd);
+    char *status = (char *) malloc(sizeof status);
+    lastMove = NULL;
+    status = "OK";
+    while (hasWon(board) != 1) {
+        printBoard(board);
+        printGameConsole(lastMove, status);
+        scanf("%s", moveCmd);
+        if (strcmp(moveCmd, "Q") == 0) {
+            printf("%s", "Exiting game...");
+            break;
         }
+        if (strcmp(&moveCmd[2], ":") == 0 || strcmp(&moveCmd[2], "-") == 0) {
+            playCommand(board, moveCmd);
+            int doable = doCommand(board, cmd, cmd->moveFrom[0], cmd->moveTo[0]);
+            if (doable == 1) {
+                lastMove = moveCmd;
+                status = "OK";
+            } else if (doable == 0) {
+                status = "Invalid Move";
+            }
+        } else {
+            //Could do something here if we wanted to.
+        }
+    }
+    usleep(2000000);
+    free(moveCmd);
+    free(lastMove);
+    clearView();
+    if (hasWon(board) == 1) {
+        printWin();
         usleep(2000000);
-        free(moveCmd);
-        free(lastMove);
-        clearView();
-        if(hasWon(board) == 1) {
-            printWin();
-            usleep(2000000);
-        }
-
+    }
 }
-
 
 int main() {
     char *cmd = (char *) malloc(sizeof(cmd));
@@ -71,13 +69,9 @@ int main() {
     //Reader
 
     //Nyt deck
-    //Card *deck = deckFromFile("new.txt");
     Card *deck = newDeck();
-
     shuffle(&deck);
-    int counter = 0;
-    Card *tmp;
-    printf("%d", counter);
+
     Board *board = createBoard();
     while (1) {
         clearView();

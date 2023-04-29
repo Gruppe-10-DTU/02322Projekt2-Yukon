@@ -31,10 +31,10 @@ Command *playCommand(Board *board,char *str){
     char *tmp = strdup(str);
     if(str[2] ==':'){
         char *from = strtok(tmp, ":");
-        char *card = strtok(NULL,":");
-        char *to = strtok(NULL, "");
+        char *card = strtok(NULL,"-");
+        char *to = strtok(NULL, ">");
         addCommand(&cmd, to, from, card);
-        free(tmp);
+
     }
     else if(str[2] == '-') {
         char *from = strtok(tmp, "-");

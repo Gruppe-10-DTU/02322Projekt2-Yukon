@@ -48,11 +48,13 @@ void startGame(Board* board) {
                 status = "Invalid Move";
             }
         } else {
-            //Could do something here if we wanted to.
+            status = "Invalid Move";
         }
     }
-    usleep(2000000);
     free(lastMove);
+    free(moveCmd);
+    free(status);
+    free(cmd);
     clearView();
     if (hasWon(board) == 1) {
         printWin();

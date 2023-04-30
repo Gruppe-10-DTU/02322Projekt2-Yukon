@@ -14,7 +14,7 @@ int testCreateBoard(){
 int testLoadDeck(){
     int result = 0;
     Board *board = createBoard();
-    Card *deck = deckFromFile("../new.txt");
+    Card *deck = deckFromFile("new.txt");
     loadDeck(board, deck);
     for(int i = 0; i < 7; i++){
         if(board->column[i].size < 1) {
@@ -35,7 +35,7 @@ int testLoadDeck(){
 int testClearBoard(){
     int result = 0;
     Board *board = createBoard();
-    Card *deck = deckFromFile("../new.txt");
+    Card *deck = deckFromFile("new.txt");
     loadDeck(board, deck);
     clearBoard(board);
     for(int i = 0; i < 7; i++){
@@ -48,7 +48,7 @@ int testClearBoard(){
 void testPrintBoard() {
     //SETUP
     Board *board = createBoard();
-    Card *deck = deckFromFile("../new.txt");
+    Card *deck = deckFromFile("new.txt");
     loadDeck(board,deck);
 
     //TEST PRINT

@@ -125,7 +125,7 @@ void printTitle(){
            "                                       \n"
            "                                       \n"
            "");
-    printGameConsole("","WELCOME TO YUKON SOLITAIRE");
+    printGameConsole("WELCOME TO YUKON SOLITAIRE","PLEASE INPUT A COMMAND. FOR LIST OF VALID COMMANDS, SEE README.");
 }
 
 void clearView(){

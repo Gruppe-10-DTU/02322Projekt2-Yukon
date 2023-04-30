@@ -30,8 +30,11 @@ void startGame(Board* board) {
     lastMove = NULL;
     status = "OK";
     while (hasWon(board) != 1) {
+        moveCmd = NULL;
         printBoard(board);
+        setbuf(stdout, 0);
         printGameConsole(lastMove, status);
+
         scanf("%ms", &moveCmd);
         if (strcmp(moveCmd, "Q") == 0) {
             printf("%s", "Exiting game...");

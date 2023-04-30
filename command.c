@@ -77,29 +77,29 @@ Command *playCommand(Board *board,char *str){
 
 int doCommand(Board *board, Command *com, char fromForC, char toForC) {
     int toReturn = 0;
+    char *fromDigit = strdup(com->moveFrom);
+    while (*fromDigit && !isdigit(*fromDigit))
+        ++fromDigit;
+    char *toDigit = strdup(com->moveTo);
+    while(*toDigit && !isdigit(*toDigit))
+        ++toDigit;
     if (fromForC == 'F') {
-        if (moveIsValid(findCard(board->foundation[(int) com->moveFrom[1]].head, com->card[1], com->card[0]),
-                        &board->column[(int) com->moveTo[1]], 0) == 1) {
-            moveCard(&board->foundation[(int) com->moveFrom[1]], &board->column[(int) com->moveTo[1]],
+        if (moveIsValid(findCard(board->foundation[atoi(fromDigit)-1].head, com->card[1], com->card[0]),
+                        &board->column[atoi(toDigit)-1], 0) == 1) {
+            moveCard(&board->foundation[atoi(fromDigit)-1], &board->column[(int) com->moveTo[1]],
                      findCard(board->foundation->head, com->card[1], com->card[0]));
             toReturn = 1;
         }
     }else{
         if(toForC == 'C'){
             if (moveIsValid(
-                    findCard(board->column[(int) com->moveFrom[1]].head, com->card[1], com->card[0]),
-                    &board->column[(int) com->moveTo[1]], 0) == 1) {
-                moveCard(&board->column[(int) com->moveFrom[1]], &board->column[(int) com->moveTo[1]],
-                         findCard(board->column[(int) com->moveFrom[1]].head, com->card[1], com->card[0]));
+                    findCard(board->column[atoi(fromDigit)-1].head, com->card[1], com->card[0]),
+                    &board->column[atoi(toDigit)-1], 0) == 1) {
+                moveCard(&board->column[atoi(fromDigit)-1], &board->column[(int) com->moveTo[1]],
+                         findCard(board->column[atoi(fromDigit)-1].head, com->card[1], com->card[0]));
                 toReturn = 1;
             }
         }else if(toForC == 'F'){
-            char *fromDigit = strdup(com->moveFrom);
-            while (*fromDigit && !isdigit(*fromDigit))
-                ++fromDigit;
-            char *toDigit = strdup(com->moveTo);
-            while(*toDigit && !isdigit(*toDigit))
-                ++toDigit;
             if (moveIsValid(
                     findCard(board->column[atoi(fromDigit) - 1].head, com->card[1], com->card[0]),
                     &board->foundation[atoi(toDigit)-1],1) == 1) {

@@ -22,6 +22,11 @@ int hasWon(Board *board){
         return 0;
 }
 
+/**
+ *
+ * @param board Board the game is started on
+ * @author Asbjørn Nielsen, Nilas Thørgsen.
+ */
 void startGame(Board* board) {
     Command *cmd = NULL;
     char *moveCmd = NULL;
@@ -41,17 +46,19 @@ void startGame(Board* board) {
             break;
         }
 
-        if (moveCmd[2] == ':' || moveCmd[2] == '-') {
+        if (moveCmd[2] == ':' || moveCmd[2] == '-' || strcmp(moveCmd,"UNDO") == 0 || strcmp(moveCmd,"REDO") == 0) {
             cmd = playCommand(board, moveCmd);
-            int doable = doCommand(board, cmd, cmd->moveFrom[0], cmd->moveTo[0]);
+            int doable = doCommand(board, cmd);
             if (doable == 1) {
                 lastMove = moveCmd;
                 status = "OK";
             } else if (doable == 0) {
                 status = "Invalid Move";
             }
-        } else {
+        }else {
             status = "Invalid Move";
+            clearView();
+            printWin();
         }
     }
     free(lastMove);
@@ -66,7 +73,7 @@ void startGame(Board* board) {
 }
 
 int main() {
-    char *cmd = (char *) malloc(sizeof(cmd));
+    char *cmd = NULL;
     //Initial Setup
     clearView();
     printTitle();
@@ -81,7 +88,7 @@ int main() {
     while (1) {
         clearView();
         printTitle();
-        scanf("%s", cmd);
+        scanf("%ms", &cmd);
         if(strcmp(cmd,"P") == 0){
             loadDeck(board,deck);
             startGame(board);

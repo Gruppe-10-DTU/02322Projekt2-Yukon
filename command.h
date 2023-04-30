@@ -10,7 +10,7 @@
 #endif //INC_02322PROJEKT2_YUKON_COMMAND_H
 
 
-typedef struct{
+typedef struct command{
     char *moveFrom;
     char *moveTo;
     char *card;
@@ -23,4 +23,4 @@ typedef struct{
 void addCommand(Command **head, char *moveTo, char *moveFrom, char *card);
 Command *playCommand(Board *board,char *str);
 
-int doCommand(Board *board, Command *com, char fromForC, char toForC);
+int doCommand(Board *board, Command *com);

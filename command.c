@@ -9,7 +9,15 @@
 #include "string.h"
 #include "board.h"
 #include <ctype.h>
-
+/**
+ * Command cards in a linked-list structure.
+ * @param head Head of commands
+ * @param moveTo Where the commands moves the card to
+ * @param moveFrom Where the commands moves the cards from
+ * @param card Suit and order of card we wish to move.
+ *
+ * @author Asbjørn Nielsen
+ */
 void addCommand(Command **head, char *moveTo, char *moveFrom, char *card){
     Command *cmd = (Command *) malloc(sizeof(Command));
     cmd->moveTo = moveTo;
@@ -25,7 +33,14 @@ void addCommand(Command **head, char *moveTo, char *moveFrom, char *card){
         *head = cmd;
     }
 };
-
+/**
+ *
+ * @param board The board we are playing the command on
+ * @param str The loaded moveCmd string.
+ * @return returns the reference to the command.
+ *
+ * @author Asbjørn Nielsen
+ */
 Command *playCommand(Board *board,char *str){
     Command *cmd = NULL;
     char *tmp = strdup(str);
@@ -67,15 +82,29 @@ Command *playCommand(Board *board,char *str){
         }
         addCommand(&cmd, to, from, card);
     }else if(strcmp(str,"UNDO") == 0 || strcmp(str,"undo") == 0){
+        if(cmd->prevCommand == NULL){
+            cmd = NULL;
+        }else{
+            //IT IS UNDO, IT IS MEANT TO BE THIS WAY!
+            addCommand(&cmd,cmd->prevCommand->moveFrom,cmd->prevCommand->moveTo,cmd->prevCommand->card);
 
+        }
     }else if(strcmp(str, "REDO") == 0 || strcmp(str,"redo") == 0){
-
+        addCommand(&cmd,cmd->nextCommand->moveTo,cmd->nextCommand->moveFrom,cmd->nextCommand->card);
     }
     return cmd;
 }
 
-
-int doCommand(Board *board, Command *com, char fromForC, char toForC) {
+/**
+ *
+ * @param board Board the command should be execute on.
+ * @param com The command
+ * @param fromForC Do they move from F or C?
+ * @return returns 1 if doable, otherwise returns 0.
+ *
+ * @author Asbjørn Nielsen
+ */
+int doCommand(Board *board, Command *com) {
     int toReturn = 0;
     char *fromDigit = strdup(com->moveFrom);
     while (*fromDigit && !isdigit(*fromDigit))
@@ -83,7 +112,7 @@ int doCommand(Board *board, Command *com, char fromForC, char toForC) {
     char *toDigit = strdup(com->moveTo);
     while(*toDigit && !isdigit(*toDigit))
         ++toDigit;
-    if (fromForC == 'F') {
+    if (com->moveFrom[0] == 'F') {
         if (moveIsValid(findCard(board->foundation[atoi(fromDigit)-1].head, com->card[1], com->card[0]),
                         &board->column[atoi(toDigit)-1], 0) == 1) {
             moveCard(&board->foundation[atoi(fromDigit)-1], &board->column[(int) com->moveTo[1]],
@@ -91,7 +120,7 @@ int doCommand(Board *board, Command *com, char fromForC, char toForC) {
             toReturn = 1;
         }
     }else{
-        if(toForC == 'C'){
+        if(com->moveTo[0] == 'C'){
             if (moveIsValid(
                     findCard(board->column[atoi(fromDigit)-1].head, com->card[1], com->card[0]),
                     &board->column[atoi(toDigit)-1], 0) == 1) {
@@ -99,7 +128,7 @@ int doCommand(Board *board, Command *com, char fromForC, char toForC) {
                          findCard(board->column[atoi(fromDigit)-1].head, com->card[1], com->card[0]));
                 toReturn = 1;
             }
-        }else if(toForC == 'F'){
+        }else if(com->moveTo[0] == 'F'){
             if (moveIsValid(
                     findCard(board->column[atoi(fromDigit) - 1].head, com->card[1], com->card[0]),
                     &board->foundation[atoi(toDigit)-1],1) == 1) {

@@ -115,6 +115,7 @@ void printBoard(Board *board){
             if (indexLine[j] != NULL) allDone = 0;
         }
     }
+    printf("\n");
     fflush(stdin);
 }
 void printGameConsole(char *lastCommand, char *message){
@@ -136,9 +137,7 @@ void printTitle(){
            "  \\___ \\ / _ \\| | | __/ _` | | '__/ _ \\\n"
            "  ____) | (_) | | | || (_| | | | |  __/\n"
            " |_____/ \\___/|_|_|\\__\\__,_|_|_|  \\___|\n"
-           "                                       \n"
-           "                                       \n"
-           "");
+           "\n");
     printGameConsole("WELCOME TO YUKON SOLITAIRE","PLEASE INPUT A COMMAND. FOR LIST OF VALID COMMANDS, SEE README.");
 }
 
@@ -151,19 +150,20 @@ void clearView(){
 }
 void showDeck(Board *board, Card *deck, int visible){
     printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
-    Column *columns = board->column;
-    Column *foundations = board->foundation;
     Card *current = deck;
+    while(current->nextCard != NULL){
+        current = current->nextCard;
+    }
     int lineCount = 0;
     while(lineCount < 8){
         int rowCount = 0;
         while (rowCount < 7) {
             if (current != NULL && visible) {
                 printf("%c%c", current->order, current->suit);
-                current = current->nextCard;
+                current = current->prevCard;
             } else if (current != NULL){
                 printf("[]");
-                current = current->nextCard;
+                current = current->prevCard;
             }
             printf("\t");
             rowCount++;
@@ -174,7 +174,15 @@ void showDeck(Board *board, Card *deck, int visible){
         printf("\n");
         lineCount++;
     }
+    printf("\n");
     fflush(stdin);
+}
+int gameFinished(Board *board){
+    int result = 1;
+    for(int i = 0; i < 4; i++){
+        if(board->foundation[i].size != 13) result = 0;
+    }
+    return result;
 }
 
 

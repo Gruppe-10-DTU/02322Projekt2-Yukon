@@ -20,5 +20,6 @@ void printGameConsole(char *lastCommand, char *message);
 void printTitle();
 void clearView();
 void showDeck(Board *board, Card *deck, int visible);
+int gameFinished(Board *board);
 
 #endif //INC_02322PROJEKT2_YUKON_BOARD_H

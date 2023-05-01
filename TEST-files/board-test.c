@@ -14,41 +14,41 @@ int testCreateBoard(){
 int testLoadDeck(){
     int result = 0;
     Board *board = createBoard();
-    Card *deck = deckFromFile("new.txt");
+    char *statusMsg = (char *) calloc(35,sizeof(char));
+    Card *deck = deckFromFile("new.txt", statusMsg);
     loadDeck(board, deck);
+    int columnCount[7] = {1,6,7,8,9,10,11};
     for(int i = 0; i < 7; i++){
-        if(board->column[i].size < 1) {
-            printf("\nCOLUMN %d SIZE %d", i ,board->column[i].size);
+        if(board->column[i].size < columnCount[i]) {
+            //printf("\nCOLUMN %d SIZE %d", i ,board->column[i].size);
             result++;
         }
     }
-    for(int j = 0; j < 7; j++){
-        while(board->column[j].head != NULL){
-            Card *tmp = board->column[j].head->nextCard;
-            free(board->column[j].head);
-            board->column[j].head = tmp;
-        }
-    }
     free(board);
+    freeDeck(deck);
+    free(statusMsg);
     return result;
 }
 int testClearBoard(){
     int result = 0;
+    char *statusMsg = (char *) calloc(35,sizeof(char));
     Board *board = createBoard();
-    Card *deck = deckFromFile("new.txt");
+    Card *deck = deckFromFile("new.txt", statusMsg);
     loadDeck(board, deck);
     clearBoard(board);
     for(int i = 0; i < 7; i++){
         if(board->column[i].size) result++;
     }
     free(board);
+    free(statusMsg);
     return result;
 }
 
 void testPrintBoard() {
     //SETUP
     Board *board = createBoard();
-    Card *deck = deckFromFile("new.txt");
+    char *statusMsg = (char *) calloc(35,sizeof(char));
+    Card *deck = deckFromFile("new.txt", statusMsg);
     loadDeck(board,deck);
 
     //TEST PRINT
@@ -58,13 +58,19 @@ void testPrintBoard() {
     clearBoard(board);
     printf("\n");
     printBoard(board);
+
     free(board);
+    free(statusMsg);
 }
 
 void testPrintGameConsole(){
-    char *lastCommand = "TEST";
-    char *message = "TEST";
-    printGameConsole(lastCommand,message);
+    char *statusMsg = (char *) calloc(35,sizeof(char));
+    Card *deck = deckFromFile("new.txt", statusMsg);
+    char *lastCommand = "LD";
+    printGameConsole(lastCommand,statusMsg);
+
+    freeDeck(deck);
+    free(statusMsg);
 }
 int testBoard(){
     int result = 0;

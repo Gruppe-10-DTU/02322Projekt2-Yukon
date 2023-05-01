@@ -8,12 +8,12 @@ Card *deckFromFile(char *filename, char *statusMsg){
     FILE *file = NULL;
     char *path = malloc(strlen(filename) + 6);
     #ifdef __WIN32__
-        char *pathFormat = "..\\%s";
+        sprintf(path,"..\\%s", filename);
     #elifdef __linux__
-        char *pathFormat = "../%s";
+        sprintf(path,"../%s", filename);
     #endif
 
-    sprintf(path,pathFormat, filename);
+    //sprintf(path,"..\\%s", filename);
 
     char str[4];
     file = fopen (path, "r");

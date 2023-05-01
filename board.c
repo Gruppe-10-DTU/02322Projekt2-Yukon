@@ -25,20 +25,33 @@ Board *createBoard(){
     return board;
 }
 
-void loadDeck(Board *board, Card *deck){
-    int columnCount[7] = {1,6,7,8,9,10,11};
+void loadDeck(Board *board, Card *deck) {
+    int columnCount[7] = {1, 6, 7, 8, 9, 10, 11};
     int i = 0;
 
     Card *topCard = deck;
-    while(i < 7 && topCard != NULL && columnCount[i]){
+    while (i < 7 && topCard != NULL && columnCount[i]) {
         deck = deck->nextCard;
-        addToColumn(&board->column[i],topCard);
+        addToColumn(&board->column[i], topCard);
         topCard = deck;
         columnCount[i]--;
         if(columnCount[i] == 0) {
             i++;
         }
     }
+    int visibleCards[7] = {1, 5, 5, 5, 5, 5, 5};
+    int j = 0;
+    Card *currentCard = board->column[j].head;
+    while (j < 7 && currentCard != NULL && visibleCards[j] > 0) {
+        currentCard->visible = 1;
+        visibleCards[j]--;
+        currentCard = currentCard->nextCard;
+        if (visibleCards[j] == 0) {
+            j++;
+            currentCard = board->column[j].head;
+        }
+    }
+
 }
 void clearBoard(Board *board){
     for(int j = 0; j < 7; j++){
@@ -72,7 +85,7 @@ void printBoard(Board *board){
     }
     int allDone = 0;
     int lineCount = 0;
-    while(!allDone && lineCount < 7){
+    while(!allDone){
         int rowCount = 0;
         while (rowCount < 7){
             if(indexLine[rowCount] == NULL){
@@ -86,7 +99,7 @@ void printBoard(Board *board){
             }
             rowCount++;
         }
-        if(lineCount % 2 == 0){
+        if(lineCount < 7 && lineCount % 2 == 0){
             printf("\t");
             if(foundations[lineCount / 2].head != NULL){
                 printf("%c%c", foundations[rowCount / 2].head->order, foundations[rowCount / 2].head->suit);
@@ -97,7 +110,7 @@ void printBoard(Board *board){
         }
         printf("\n");
         lineCount++;
-        if(lineCount== 7) allDone = 1;
+        if(lineCount >= 7) allDone = 1;
         for(int j = 0; j < 7; j++){
             if (indexLine[j] != NULL) allDone = 0;
         }
@@ -108,6 +121,7 @@ void printGameConsole(char *lastCommand, char *message){
     printf("LAST Command: %s\n", lastCommand);
     printf("MESSAGE: %s\n",message);
     printf("INPUT >");
+    fflush(stdout);
 }
 void printTitle(){
     clearView();

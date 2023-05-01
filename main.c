@@ -18,6 +18,7 @@ int main() {
     char *cmd = (char *) malloc(sizeof(cmd));
     char *cmdS1 = (char * ) malloc(sizeof cmdS1);
     char *cmdS2 = (char*) malloc(sizeof cmdS2);
+    char *statusMsg = (char *) calloc(100, sizeof(char));
     //Initial Setup
     clearView();
     printTitle();
@@ -25,7 +26,7 @@ int main() {
     //Reader
 
     //Nyt deck
-    Card *deck = deckFromFile("new.txt");
+    Card *deck = deckFromFile("new.txt", statusMsg);
     shuffle(&deck);
     int counter = 0;
     Card *tmp;
@@ -39,7 +40,7 @@ int main() {
     Board *board = createBoard();
 
     while (1) {
-        printTitle();
+        strcpy(statusMsg,"");
         scanf("%s", cmd);
         char *split = strtok(cmd, "<");
         cmdS1 = split;
@@ -49,9 +50,10 @@ int main() {
             startGame(board);
         }
         else if(strcmp(cmdS1,"LD") == 0){
-            deck = deckFromFile(cmdS2);
+            deck = deckFromFile(cmdS2,statusMsg);
             loadDeck(board,deck);
             printBoard(board);
+            printGameConsole(cmd,statusMsg);
         }
         else if(strcmp(cmdS1,"SW") == 0){
 
@@ -68,11 +70,19 @@ int main() {
         else if(strcmp(cmdS1,"QQ") == 0){
             break;
         }else{
+            strcpy(statusMsg, "Unknown command. See read me for available commands.");
             //TO BE IMPLEMENTED (Return error status).
         }
+        clearView();
+        printBoard(board);
+        printGameConsole(cmd,statusMsg);
     }
     free(cmd);
     free(cmdS1);
     free(cmdS2);
+    free(statusMsg);
+    clearBoard(board);
+    free(board);
+    freeDeck(deck);
     return 0;
 }

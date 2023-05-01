@@ -9,15 +9,15 @@
 #include <string.h>
 #include "deck.h"
 
-Card *deckFromFile(char *filename);
+Card *deckFromFile(char *filename, char *statusMsg);
 
-Card *newDeck();
+Card *newDeck(char *statusmsg);
 
 void saveCard(Card *card, FILE *file);
 
 void saveDeck(Card *deck, char *filename);
 
-int deckIsValid(Card *head, char suit, char order, int counter);
+int deckIsValid(Card *head, char suit, char order, int counter, char *statusMsg);
 
 
 #endif //INC_02322PROJEKT2_YUKON_FILEHANDLER_H

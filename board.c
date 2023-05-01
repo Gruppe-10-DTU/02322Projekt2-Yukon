@@ -132,7 +132,7 @@ void clearView(){
 #ifdef __linux__
     system("clear");
 #elif __WIN32__
-    system("clear");
+    system("cls");
 #endif
 }
 

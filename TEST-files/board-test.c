@@ -15,7 +15,7 @@ int testLoadDeck(){
     int result = 0;
     Board *board = createBoard();
     char *statusMsg = (char *) calloc(35,sizeof(char));
-    Card *deck = deckFromFile("new.txt", statusMsg);
+    Card *deck = deckFromFile("../new.txt", statusMsg);
     loadDeck(board, deck);
     int columnCount[7] = {1,6,7,8,9,10,11};
     for(int i = 0; i < 7; i++){
@@ -33,7 +33,7 @@ int testClearBoard(){
     int result = 0;
     char *statusMsg = (char *) calloc(35,sizeof(char));
     Board *board = createBoard();
-    Card *deck = deckFromFile("new.txt", statusMsg);
+    Card *deck = deckFromFile("../new.txt", statusMsg);
     loadDeck(board, deck);
     clearBoard(board);
     for(int i = 0; i < 7; i++){
@@ -48,7 +48,7 @@ void testPrintBoard() {
     //SETUP
     Board *board = createBoard();
     char *statusMsg = (char *) calloc(35,sizeof(char));
-    Card *deck = deckFromFile("new.txt", statusMsg);
+    Card *deck = deckFromFile("../new.txt", statusMsg);
     loadDeck(board,deck);
 
     //TEST PRINT
@@ -65,7 +65,7 @@ void testPrintBoard() {
 
 void testPrintGameConsole(){
     char *statusMsg = (char *) calloc(35,sizeof(char));
-    Card *deck = deckFromFile("new.txt", statusMsg);
+    Card *deck = deckFromFile("../new.txt", statusMsg);
     char *lastCommand = "LD";
     printGameConsole(lastCommand,statusMsg);
 

@@ -149,6 +149,30 @@ void clearView(){
     system("cls");
 #endif
 }
+void showDeck(Board *board, Card *deck){
+    printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
+    Column *columns = board->column;
+    Column *foundations = board->foundation;
+    Card *current = deck;
+    int lineCount = 0;
+    while(lineCount < 8){
+        int rowCount = 0;
+        while (rowCount < 7) {
+            if (current != NULL) {
+                printf("%c%c", current->order, current->suit);
+                current = current->nextCard;
+            }
+            printf("\t");
+            rowCount++;
+        }
+        if(lineCount < 7 && lineCount % 2 == 0) {
+            printf("[]\tF%d", (lineCount / 2) + 1);
+        }
+        printf("\n");
+        lineCount++;
+    }
+    fflush(stdin);
+}
 
 
 

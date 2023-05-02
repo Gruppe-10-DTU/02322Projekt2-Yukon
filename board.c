@@ -5,11 +5,11 @@
 #include "deck.h"
 #include "column.h"
 
-Board *createBoard(){
+Board *createBoard(void){
     Board *board = (Board *) malloc(sizeof(Board));
 
-    Column columns[7];
-    for (int i = 0; i < 7; i++) {
+    Column columns[COLUMNS];
+    for (int i = 0; i < COLUMNS; i++) {
         columns[i].head = NULL;
         columns[i].tail = NULL;
         columns[i].size = 0;
@@ -26,11 +26,11 @@ Board *createBoard(){
 }
 
 void loadDeck(Board *board, Card *deck) {
-    int columnCount[7] = {1, 6, 7, 8, 9, 10, 11};
+    int columnCount[COLUMNS] = {1, 6, 7, 8, 9, 10, 11};
     int i = 0;
 
     Card *topCard = deck;
-    while (i < 7 && topCard != NULL && columnCount[i]) {
+    while (i < COLUMNS && topCard != NULL && columnCount[i]) {
         deck = deck->nextCard;
         addToColumn(&board->column[i], topCard);
         topCard = deck;
@@ -39,22 +39,22 @@ void loadDeck(Board *board, Card *deck) {
             i++;
         }
     }
-    int visibleCards[7] = {1, 5, 5, 5, 5, 5, 5};
-    int j = 0;
-    Card *currentCard = board->column[j].head;
-    while (j < 7 && currentCard != NULL && visibleCards[j] > 0) {
+    int visibleCards[COLUMNS] = {1, 5, 5, 5, 5, 5, 5};
+    i = 0;
+    Card *currentCard = board->column[i].head;
+    while (i < COLUMNS && currentCard != NULL && visibleCards[i] > 0) {
         currentCard->visible = 1;
-        visibleCards[j]--;
+        visibleCards[i]--;
         currentCard = currentCard->nextCard;
-        if (visibleCards[j] == 0) {
-            j++;
-            currentCard = board->column[j].head;
+        if (visibleCards[i] == 0) {
+            i++;
+            currentCard = board->column[i].head;
         }
     }
 
 }
 void clearBoard(Board *board){
-    for(int j = 0; j < 7; j++){
+    for(int j = 0; j < COLUMNS; j++){
         while(board->column[j].head != NULL){
             Card *tmp = board->column[j].head->nextCard;
             free(board->column[j].head);
@@ -79,15 +79,15 @@ void printBoard(Board *board){
     printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
     Column *columns = board->column;
     Column *foundations = board->foundation;
-    Card *indexLine[7];
-    for(int i = 0; i < 7; i++) {
+    Card *indexLine[COLUMNS];
+    for(int i = 0; i < COLUMNS; i++) {
         indexLine[i] = columns[i].tail;
     }
     int allDone = 0;
     int lineCount = 0;
     while(!allDone){
         int rowCount = 0;
-        while (rowCount < 7){
+        while (rowCount < COLUMNS){
             if(indexLine[rowCount] == NULL){
                 printf("\t");
             } else if (!indexLine[rowCount]->visible){
@@ -99,7 +99,7 @@ void printBoard(Board *board){
             }
             rowCount++;
         }
-        if(lineCount < 7 && lineCount % 2 == 0){
+        if(lineCount < COLUMNS && lineCount % 2 == 0){
             printf("\t");
             if(foundations[lineCount / 2].head != NULL){
                 printf("%c%c", foundations[rowCount / 2].head->order, foundations[rowCount / 2].head->suit);
@@ -110,8 +110,8 @@ void printBoard(Board *board){
         }
         printf("\n");
         lineCount++;
-        if(lineCount >= 7) allDone = 1;
-        for(int j = 0; j < 7; j++){
+        if(lineCount >= COLUMNS) allDone = 1;
+        for(int j = 0; j < COLUMNS; j++){
             if (indexLine[j] != NULL) allDone = 0;
         }
     }
@@ -124,7 +124,7 @@ void printGameConsole(char *lastCommand, char *message){
     printf("INPUT >");
     fflush(stdout);
 }
-void printTitle(){
+void printTitle(void){
     clearView();
     printf(" __     __    _                        \n"
            " \\ \\   / /   | |                       \n"
@@ -141,7 +141,7 @@ void printTitle(){
     printGameConsole("WELCOME TO YUKON SOLITAIRE","PLEASE INPUT A COMMAND. FOR LIST OF VALID COMMANDS, SEE README.");
 }
 
-void clearView(){
+void clearView(void){
 #ifdef __linux__
     system("clear");
 #elif __WIN32__
@@ -150,14 +150,12 @@ void clearView(){
 }
 void showDeck(Board *board, Card *deck, int visible){
     printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
-    Card *current = deck;
-    while(current->nextCard != NULL){
-        current = current->nextCard;
-    }
+    Card *current;
+    for(current = deck; current->nextCard; current = current->nextCard);
     int lineCount = 0;
     while(lineCount < 8){
         int rowCount = 0;
-        while (rowCount < 7) {
+        while (rowCount < COLUMNS) {
             if (current != NULL && visible) {
                 printf("%c%c", current->order, current->suit);
                 current = current->prevCard;
@@ -168,7 +166,7 @@ void showDeck(Board *board, Card *deck, int visible){
             printf("\t");
             rowCount++;
         }
-        if(lineCount < 7 && lineCount % 2 == 0) {
+        if(lineCount < COLUMNS && lineCount % 2 == 0) {
             printf("\t[]\tF%d", (lineCount / 2) + 1);
         }
         printf("\n");
@@ -179,8 +177,8 @@ void showDeck(Board *board, Card *deck, int visible){
 }
 int gameFinished(Board *board){
     int result = 1;
-    for(int i = 0; i < 4; i++){
-        if(board->foundation[i].size != 13) result = 0;
+    for(int i = 0; i < FOUNDATIONS; i++){
+        if(board->foundation[i].size != SUIT_SIZE) result = 0;
     }
     return result;
 }

@@ -6,7 +6,20 @@
 #include "board.h"
 
 
-void startGame(Board* board){
+void startGame(Board* board, char *statusMsg){
+    char cmd[4] = {0};
+    while (!gameFinished(board)){
+        if(strcasecmp("Q", cmd) == 0){
+            strcpy(statusMsg, "Quitting game.");
+            clearBoard(board);
+
+            break;
+        } else if (strcasecmp(cmd,"LD") || strcasecmp(cmd,"LD")){
+            strcpy(statusMsg, "Command not available in the PLAY phase");
+        }
+        printBoard(board);
+        printGameConsole(cmd,statusMsg);
+    }
     //DOES NOTHING FOR NOW WIP.
 }
 
@@ -23,8 +36,7 @@ int main() {
     //Reader
 
     //Nyt deck
-    Card *deck = newDeck(statusMsg);
-
+    Card *deck = NULL;
     Board *board = createBoard();
 
     while (1) {
@@ -32,40 +44,52 @@ int main() {
         scanf("%s", cmd);
         char *split = strtok(cmd, "<");
         cmdS1 = split;
-        split = strtok("<",cmd);
+        split = strtok(NULL,">");
         cmdS2 = split;
-        if(strcmp(cmdS1,"P") == 0){
-            loadDeck(board,deck);
-            startGame(board);
+        printf("Command: %s\nArgument: %s\n", cmdS1, cmdS2);
+        if(strcasecmp(cmdS1,"P") == 0){
+            clearView();
+            if(deck != NULL) {
+                shuffle(&deck);
+                loadDeck(board, deck);
+                printBoard(board);
+                printGameConsole(cmdS1, "Game Started");
+                startGame(board, statusMsg);
+            }else {
+                printBoard(board);
+                printGameConsole(cmdS1, "No deck loaded.");
+            }
         }
-        else if(strcmp(cmdS1,"LD") == 0){
-            deck = deckFromFile(cmdS2,statusMsg);
+        else if(strcasecmp(cmdS1,"LD") == 0){
+            if (cmdS2 != NULL) {
+                deck = deckFromFile(cmdS2,statusMsg);
+            } else deck = newDeck(statusMsg);
             clearView();
             showDeck(board, deck, 0);
             printGameConsole(cmdS1,statusMsg);
         }
-        else if(strcmp(cmdS1,"SW") == 0){
+        else if(strcasecmp(cmdS1,"SW") == 0){
             clearView();
             showDeck(board, deck, 1);
             printGameConsole(cmdS1,"OK");
         }
-        else if(strcmp(cmdS1,"SI") == 0){
+        else if(strcasecmp(cmdS1,"SI") == 0){
             clearView();
             printBoard(board);
             printGameConsole(cmdS1,"OK");
         }
-        else if(strcmp(cmdS1,"SR") == 0){
+        else if(strcasecmp(cmdS1,"SR") == 0){
             clearView();
             shuffle(&deck);
             printBoard(board);
             printGameConsole(cmdS1,"OK");
         }
-        else if(strcmp(cmdS1,"SD") == 0){
+        else if(strcasecmp(cmdS1,"SD") == 0){
             clearView();
             printBoard(board);
             printGameConsole(cmdS1,"OK");
         }
-        else if(strcmp(cmdS1,"QQ") == 0){
+        else if(strcasecmp(cmdS1,"QQ") == 0){
             strcpy(statusMsg, "Thank you for playing!");
             clearView();
             clearBoard(board);

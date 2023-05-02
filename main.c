@@ -12,11 +12,12 @@ void startGame(Board* board, char *statusMsg){
         if(strcasecmp("Q", cmd) == 0){
             strcpy(statusMsg, "Quitting game.");
             clearBoard(board);
-
-            break;
-        } else if (strcasecmp(cmd,"LD") || strcasecmp(cmd,"LD")){
+            return;
+        } else if (!strcasecmp(cmd,"LD") || !strcasecmp(cmd,"SW") || !strcasecmp(cmd,"SR") ||
+            !strcasecmp(cmd,"SI") || !strcasecmp(cmd,"SD")){
             strcpy(statusMsg, "Command not available in the PLAY phase");
         }
+        clearView();
         printBoard(board);
         printGameConsole(cmd,statusMsg);
     }
@@ -25,9 +26,9 @@ void startGame(Board* board, char *statusMsg){
 
 
 int main() {
-    char *cmd = (char *) calloc(100,sizeof(cmd));
-    char *cmdS1 = (char * ) malloc(sizeof cmdS1);
-    char *cmdS2 = (char*) malloc(sizeof cmdS2);
+    char *cmd = NULL;//(char *) calloc(100,sizeof(cmd));
+    char *cmdS1 = (char *) malloc(sizeof cmdS1);
+    char *cmdS2 = (char *) malloc(sizeof cmdS2);
     char *statusMsg = (char *) calloc(100, sizeof(char));
     //Initial Setup
     clearView();
@@ -41,15 +42,15 @@ int main() {
 
     while (1) {
         strcpy(statusMsg,"");
-        scanf("%s", cmd);
+        scanf("%ms", &cmd);
         char *split = strtok(cmd, "<");
         cmdS1 = split;
         split = strtok(NULL,">");
         cmdS2 = split;
-        printf("Command: %s\nArgument: %s\n", cmdS1, cmdS2);
+        //printf("Command: %s\nArgument: %s\n", cmdS1, cmdS2);
         if(strcasecmp(cmdS1,"P") == 0){
             clearView();
-            if(deck != NULL) {
+            if(deck) {
                 shuffle(&deck);
                 loadDeck(board, deck);
                 printBoard(board);
@@ -61,7 +62,7 @@ int main() {
             }
         }
         else if(strcasecmp(cmdS1,"LD") == 0){
-            if (cmdS2 != NULL) {
+            if (cmdS2) {
                 deck = deckFromFile(cmdS2,statusMsg);
             } else deck = newDeck(statusMsg);
             clearView();

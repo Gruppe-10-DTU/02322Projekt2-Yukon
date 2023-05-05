@@ -21,12 +21,11 @@ void startGame(Board* board, char *statusMsg){
         printBoard(board);
         printGameConsole(cmd,statusMsg);
     }
-    //DOES NOTHING FOR NOW WIP.
 }
 
 
 int main() {
-    char *cmd = NULL;//(char *) calloc(100,sizeof(cmd));
+    char *cmd = NULL;
     char *cmdS1 = (char *) malloc(sizeof cmdS1);
     char *cmdS2 = (char *) malloc(sizeof cmdS2);
     char *statusMsg = (char *) calloc(100, sizeof(char));
@@ -102,7 +101,6 @@ int main() {
             clearView();
             printBoard(board);
             printGameConsole(cmd,statusMsg);
-            //TO BE IMPLEMENTED (Return error status).
         }
     }
     free(cmdS1);

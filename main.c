@@ -4,12 +4,10 @@
 #include "filehandler.h"
 #include "deck.h"
 #include "board.h"
-#include "board.h"
-#include "column.h"
 #include "stdio.h"
 #include "string.h"
 #include "command.h"
-#include <unistd.h>
+
 
 int hasWon(Board *board){
     int size = 0;
@@ -21,7 +19,6 @@ int hasWon(Board *board){
     else
         return 0;
 }
-
 /**
  *
  * @param board Board the game is started on
@@ -37,18 +34,15 @@ void startGame(Board* board) {
     while (hasWon(board) != 1) {
         moveCmd = NULL;
         printBoard(board);
+        //Used for debug only. Wouldn't print console output when debugging, found this solution online.
         setbuf(stdout, 0);
         printGameConsole(lastMove, status);
-
         scanf("%ms", &moveCmd);
         if (strcmp(moveCmd, "Q") == 0) {
             printf("%s", "Exiting game...");
             break;
-        }else if (!strcasecmp(cmd,"LD") || !strcasecmp(cmd,"SW") || !strcasecmp(cmd,"SR") ||
-                  !strcasecmp(cmd,"SI") || !strcasecmp(cmd,"SD")){
-            strcpy(status, "Command not available in the PLAY phase");
         }
-
+        //Check to see if the input is one of the variants of valid commands.
         if (moveCmd[2] == ':' || moveCmd[2] == '-' || strcmp(moveCmd,"UNDO") == 0 || strcmp(moveCmd,"REDO") == 0) {
             cmd = playCommand(board, moveCmd);
             int doable = doCommand(board, cmd);
@@ -61,7 +55,6 @@ void startGame(Board* board) {
         }else {
             status = "Invalid Move";
             clearView();
-            printWin();
         }
     }
     free(lastMove);
@@ -71,7 +64,6 @@ void startGame(Board* board) {
     clearView();
     if (hasWon(board) == 1) {
         printWin();
-        usleep(2000000);
     }
 }
 

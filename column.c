@@ -58,20 +58,23 @@ void appendToColumn(Column *pColumn, Card *pCard) {
  *
  * @author Philip Astrup Cramer
  */
-void moveCard(Column *from, Column *to, Card *mvCard){
+void moveCard(Column *from, Column *to, Card *mvCard) {
     Card *current = NULL;
     int mvCount = 1;
     //Iterates through the 'from' column until match or end is found
-    for(current = from->head; current != mvCard; current = current->nextCard){
+    for (current = from->head; current != mvCard; current = current->nextCard) {
         mvCount++;
-        if(current == NULL) return;
+        if (current == NULL) return;
     }
     //updates the head of the 'from' column
     from->head = current->nextCard;
-    if(!from->head){
+    if (!from->head) {
         from->tail = NULL;
-    }else {
+    } else {
         from->head->prevCard = NULL;
+    }
+    if (from->head->visible != 1){
+        from->head->visible = 1;
     }
     from->size -= mvCount;
 

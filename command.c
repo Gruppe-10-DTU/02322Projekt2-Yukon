@@ -101,7 +101,6 @@ Command *playCommand(Board *board,char *str){
     return cmd;
 }
 
-
 /**
  *
  * @param board Board the command should be execute on.
@@ -122,7 +121,7 @@ int doCommand(Board *board, Command *com) {
 
     int to = atoi(toDigit)-1;
     int from = atoi(fromDigit)-1;
-    if(to && from) {
+    if(isdigit(to) == 0 && isdigit(from) == 0) {
         if (com->moveFrom[0] == 'F') {
             if (moveIsValid(findCard(board->foundation[from].head, com->card[1], com->card[0]),
                             &board->column[to], 0) == 1) {

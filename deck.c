@@ -98,9 +98,6 @@ void freeDeck(Card *head){
 
 
 
-
-
-
 Card* findCard(Card* cards, char suit, char order){
     while(cards != NULL){
         if(cards->order == order && cards->suit == suit){

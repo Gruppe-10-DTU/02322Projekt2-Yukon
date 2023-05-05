@@ -25,5 +25,4 @@ void clearView(void);
 void showDeck(Board *board, Card *deck, int visible);
 int gameFinished(Board *board);
 void printWin();
-
 #endif //INC_02322PROJEKT2_YUKON_BOARD_H

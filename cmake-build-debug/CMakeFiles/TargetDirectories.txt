@@ -1,4 +1,0 @@
-/home/pcramer/Documents/Maskinnær/Projekt2-Yukon/cmake-build-debug/CMakeFiles/02322Projekt2-Yukon.dir
-/home/pcramer/Documents/Maskinnær/Projekt2-Yukon/cmake-build-debug/CMakeFiles/Yukon_Test.dir
-/home/pcramer/Documents/Maskinnær/Projekt2-Yukon/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/pcramer/Documents/Maskinnær/Projekt2-Yukon/cmake-build-debug/CMakeFiles/rebuild_cache.dir

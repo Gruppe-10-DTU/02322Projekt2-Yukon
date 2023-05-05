@@ -9,7 +9,7 @@ Card *deckFromFile(char *filename, char *statusMsg){
     char *path = malloc(strlen(filename) + 6);
     #ifdef __WIN32__
         sprintf(path,"..\\%s", filename);
-    #elifdef __linux__
+    #elif __linux__
         sprintf(path,"../%s", filename);
     #endif
 
@@ -68,7 +68,7 @@ Card *newDeck(char *statusMsg){
 
 int deckIsValid(Card *card, char suit, char order, int counter, char *statusMsg){
     if(card == NULL){
-        strcpy(statusMsg, "OK");
+        strcpy(statusMsg,statusMsg);
         return 1;
     }else if(card->order == order && card->suit == suit) {
         strcpy(statusMsg,"The deck has duplicate cards");

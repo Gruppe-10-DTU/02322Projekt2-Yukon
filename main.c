@@ -85,12 +85,12 @@ int main() {
     //Reader
 
     //Nyt deck
-    Card *deck = newDeck();
+    Card *deck = newDeck("OK");
     shuffle(&deck);
 
     Board *board = createBoard();
 
-    while (1) {
+    while(1) {
         clearView();
         printTitle();
         scanf("%ms", &cmd);
@@ -100,7 +100,7 @@ int main() {
         }
         else if(strcmp(cmd,"LD") == 0){
             scanf("Enter filename: %s", cmd);
-            deck = deckFromFile(cmd);
+            deck = deckFromFile(cmd,"OK");
             loadDeck(board,deck);
             printBoard(board);
         }

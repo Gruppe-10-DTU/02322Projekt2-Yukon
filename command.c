@@ -101,6 +101,7 @@ Command *playCommand(Board *board,char *str){
     return cmd;
 }
 
+
 /**
  *
  * @param board Board the command should be execute on.
@@ -118,29 +119,34 @@ int doCommand(Board *board, Command *com) {
     char *toDigit = strdup(com->moveTo);
     while(*toDigit && !isdigit(*toDigit))
         ++toDigit;
-    if (com->moveFrom[0] == 'F' && *fromDigit && *toDigit) {
-        if (moveIsValid(findCard(board->foundation[atoi(fromDigit)-1].head, com->card[1], com->card[0]),
-                        &board->column[atoi(toDigit)-1], 0) == 1) {
-            moveCard(&board->foundation[atoi(fromDigit)-1], &board->column[atoi(toDigit)-1],
-                     findCard(board->foundation->head, com->card[1], com->card[0]));
-            toReturn = 1;
-        }
-    }else{
-        if(com->moveTo[0] == 'C' && *fromDigit && *toDigit){
-            if (moveIsValid(
-                    findCard(board->column[atoi(fromDigit)-1].head, com->card[1], com->card[0]),
-                    &board->column[atoi(toDigit)-1], 0) == 1) {
-                moveCard(&board->column[atoi(fromDigit)-1], &board->column[atoi(toDigit)-1],
-                         findCard(board->column[atoi(fromDigit)-1].head, com->card[1], com->card[0]));
+
+    int to = atoi(toDigit)-1;
+    int from = atoi(fromDigit)-1;
+    if(to && from) {
+        if (com->moveFrom[0] == 'F') {
+            if (moveIsValid(findCard(board->foundation[from].head, com->card[1], com->card[0]),
+                            &board->column[to], 0) == 1) {
+                moveCard(&board->foundation[from], &board->column[to],
+                         findCard(board->foundation->head, com->card[1], com->card[0]));
                 toReturn = 1;
             }
-        }else if(com->moveTo[0] == 'F' && *fromDigit && *toDigit){
-            if (moveIsValid(
-                    findCard(board->column[atoi(fromDigit) - 1].head, com->card[1], com->card[0]),
-                    &board->foundation[atoi(toDigit)-1],1) == 1) {
-                moveCard(&board->column[atoi(fromDigit)-1], &board->foundation[atoi(toDigit)-1],
-                         findCard(board->column[atoi(fromDigit)-1].head, com->card[1], com->card[0]));
-                toReturn = 1;
+        } else {
+            if (com->moveTo[0] == 'C') {
+                if (moveIsValid(
+                        findCard(board->column[from].head, com->card[1], com->card[0]),
+                        &board->column[to], 0) == 1) {
+                    moveCard(&board->column[from], &board->column[to],
+                             findCard(board->column[from].head, com->card[1], com->card[0]));
+                    toReturn = 1;
+                }
+            } else if (com->moveTo[0] == 'F') {
+                if (moveIsValid(
+                        findCard(board->column[from].head, com->card[1], com->card[0]),
+                        &board->foundation[to], 1) == 1) {
+                    moveCard(&board->column[from], &board->foundation[to],
+                             findCard(board->column[from].head, com->card[1], com->card[0]));
+                    toReturn = 1;
+                }
             }
         }
     }

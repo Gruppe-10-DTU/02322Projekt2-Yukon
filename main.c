@@ -19,8 +19,8 @@ int main() {
     char *cmdS1 = (char * ) malloc(sizeof cmdS1);
     char *cmdS2 = (char*) malloc(sizeof cmdS2);
     //Initial Setup
-    clearView();
-    printTitle();
+    // clearView();
+    // printTitle();
 
     //Reader
 
@@ -28,7 +28,8 @@ int main() {
     Card *deck = deckFromFile("new.txt");
     split(&deck, 0);
     split(&deck, 52);
-    split(&deck, 26);
+    split(&deck, 2);
+
 
     while (1) {
         printTitle();

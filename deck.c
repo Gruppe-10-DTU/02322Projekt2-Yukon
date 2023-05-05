@@ -106,29 +106,52 @@ void split(Card **head, int splitIndex){
     Card *firstDeck = *head, *secondDeck = firstDeck, *shufflePile;
     if(splitIndex == -1){
         splitIndex = (rand() % (52));
-    }else if(splitIndex == 0 || splitIndex == 52 || head == NULL){
+    }else if(splitIndex == 0 || splitIndex >= 52 || head == NULL){
         return;
     }
     for (int i = 0; i < splitIndex; ++i) {
         secondDeck = secondDeck->nextCard;
+        firstDeck = firstDeck->nextCard;
     }
+    firstDeck = firstDeck->prevCard;
+    firstDeck->nextCard = NULL;
+    for (int i = 1; i < splitIndex; ++i) {
+        firstDeck = firstDeck->prevCard;
+    }
+
+    //Clean up the previous card on the two decks.
+    firstDeck->prevCard = NULL;
+    secondDeck->prevCard = NULL;
+
+    //Set the shuffle pile to the first card of the first deck
     shufflePile = firstDeck;
-    shufflePile->prevCard = NULL;
     firstDeck = firstDeck->nextCard;
+
     while(firstDeck != NULL && secondDeck != NULL){
         shufflePile->nextCard = secondDeck;
         secondDeck->prevCard = shufflePile;
-        shufflePile = secondDeck;
+        shufflePile = shufflePile->nextCard;
         secondDeck = secondDeck->nextCard;
+
         shufflePile->nextCard = firstDeck;
         firstDeck->prevCard = shufflePile;
-        shufflePile = firstDeck;
+        shufflePile = shufflePile->nextCard;
         firstDeck = firstDeck->nextCard;
     }
     if(firstDeck == NULL){
-        shufflePile->nextCard = secondDeck;
+        while(secondDeck != NULL){
+            shufflePile->nextCard = secondDeck;
+            secondDeck->prevCard = shufflePile;
+            shufflePile = shufflePile->nextCard;
+            secondDeck = secondDeck->nextCard;
+        }
     }else{
-        shufflePile->nextCard = firstDeck;
+        while(firstDeck != NULL){
+            shufflePile->nextCard = firstDeck;
+            firstDeck->prevCard = shufflePile;
+            shufflePile = shufflePile->nextCard;
+            firstDeck = firstDeck->nextCard;
+        }
     }
     *head = shufflePile;
 }

@@ -2,7 +2,6 @@
 // Created by asbpo on 14-04-2023.
 //
 #include "deck.h"
-#include<stdlib.h>
 
 
 void addCard(Card **head,char suit, char order){

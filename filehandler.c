@@ -3,23 +3,28 @@
 //
 #include "filehandler.h"
 
-Card *deckFromFile(char *filename){
+Card *deckFromFile(char *filename, char *statusMsg){
     Card *deck = NULL;
     FILE *file = NULL;
     char *path = malloc(strlen(filename) + 6);
+    #ifdef __WIN32__
+        sprintf(path,"..\\%s", filename);
+    #elifdef __linux__
+        sprintf(path,"../%s", filename);
+    #endif
 
-    sprintf(path,"..\\%s", filename);
+    //sprintf(path,"..\\%s", filename);
 
     char str[4];
     file = fopen (path, "r");
     if(file == NULL){
-        printf("error");
+        strcpy(statusMsg,"File does not exist");
         return NULL;
     }
     int i;
     while (fgets(str, 4, file) != NULL){
         i = 0;
-        if(deckIsValid(deck, str[1], str[0], i) == 0){
+        if(!deckIsValid(deck, str[1], str[0], i, statusMsg)){
             freeDeck(deck);
             deck = NULL;
             break;
@@ -38,7 +43,7 @@ Card *deckFromFile(char *filename){
 void saveDeck(Card *deck, char *filename){
     FILE *file = NULL;
     char* path = malloc(strlen(filename + 6));
-    sprintf(path,"..\\%s", filename);
+    sprintf(path,"../%s", filename);
     file = fopen(path, "a+");
     char check;
     if(fscanf(file, "c" ,check) != 1){
@@ -57,20 +62,21 @@ void saveCard(Card *card, FILE *file){
     fputc(card->suit, file);
 }
 
-Card *newDeck(){
-    return deckFromFile("new.txt");
+Card *newDeck(char *statusMsg){
+    return deckFromFile("new.txt", statusMsg);
 }
 
-int deckIsValid(Card *card, char suit, char order, int counter){
+int deckIsValid(Card *card, char suit, char order, int counter, char *statusMsg){
     if(card == NULL){
+        strcpy(statusMsg, "OK");
         return 1;
     }else if(card->order == order && card->suit == suit) {
-        printf("The deck has dublicate cards");
+        strcpy(statusMsg,"The deck has duplicate cards");
         return 0;
     }else if(counter >= 52){
-        printf("The deck contains too many cards");
+        strcpy(statusMsg, "The deck contains too many cards");
         return 0;
     }else{
-        return deckIsValid(card->nextCard, suit, order, counter++);
+        return deckIsValid(card->nextCard, suit, order, counter++, statusMsg);
     }
 };

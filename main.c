@@ -44,6 +44,9 @@ void startGame(Board* board) {
         if (strcmp(moveCmd, "Q") == 0) {
             printf("%s", "Exiting game...");
             break;
+        }else if (!strcasecmp(cmd,"LD") || !strcasecmp(cmd,"SW") || !strcasecmp(cmd,"SR") ||
+                  !strcasecmp(cmd,"SI") || !strcasecmp(cmd,"SD")){
+            strcpy(status, "Command not available in the PLAY phase");
         }
 
         if (moveCmd[2] == ':' || moveCmd[2] == '-' || strcmp(moveCmd,"UNDO") == 0 || strcmp(moveCmd,"REDO") == 0) {
@@ -73,6 +76,7 @@ void startGame(Board* board) {
 }
 
 int main() {
+    char *statusMsg = (char *) calloc(100, sizeof(char));
     char *cmd = NULL;
     //Initial Setup
     clearView();
@@ -85,6 +89,7 @@ int main() {
     shuffle(&deck);
 
     Board *board = createBoard();
+
     while (1) {
         clearView();
         printTitle();
@@ -99,28 +104,54 @@ int main() {
             loadDeck(board,deck);
             printBoard(board);
         }
-        else if(strcmp(cmd,"SW") == 0){
-
+        else if(strcasecmp(cmd,"LD") == 0){
+            if (cmd) {
+                deck = deckFromFile(cmd,statusMsg);
+            } else deck = newDeck(statusMsg);
+            clearView();
+            showDeck(board, deck, 0);
+            printGameConsole(cmd,statusMsg);
         }
-        else if(strcmp(cmd,"SI") == 0){
-
+        else if(strcasecmp(cmd,"SW") == 0){
+            clearView();
+            showDeck(board, deck, 1);
+            printGameConsole(cmd,"OK");
         }
-        else if(strcmp(cmd,"SR") == 0){
-
+        else if(strcasecmp(cmd,"SI") == 0){
+            clearView();
+            printBoard(board);
+            printGameConsole(cmd,"OK");
         }
-        else if(strcmp(cmd,"SD") == 0){
-
+        else if(strcasecmp(cmd,"SR") == 0){
+            clearView();
+            shuffle(&deck);
+            printBoard(board);
+            printGameConsole(cmd,"OK");
         }
-        else if(strcmp(cmd,"QQ") == 0){
-            printf("%s","Exiting game. Goodbye!");
+        else if(strcasecmp(cmd,"SD") == 0){
+            clearView();
+            printBoard(board);
+            printGameConsole(cmd,"OK");
+        }
+        else if(strcasecmp(cmd,"QQ") == 0){
+            strcpy(statusMsg, "Thank you for playing!");
+            clearView();
+            clearBoard(board);
+            printBoard(board);
+            printGameConsole(cmd,statusMsg);
             break;
 
         }else{
+            strcpy(statusMsg, "Unknown command. See read me for available commands.");
+            clearView();
+            printBoard(board);
+            printGameConsole(cmd,statusMsg);
             //TO BE IMPLEMENTED (Return error status).
         }
     }
     free(cmd);
     free(board);
     free(deck);
+    free(statusMsg);
     return 0;
 }

@@ -58,45 +58,33 @@ Command *playCommand(Board *board,char *str){
         char *tempCheck = strdup(from);
         while (*tempCheck && !isdigit(*tempCheck))
             ++tempCheck;
-        if ((from[0] == 'C' || from[0] == 'F') && *tempCheck) {
-                char tmp1 = board->column[atoi(tempCheck)-1].head->order;
-                char tmp2 = board->column[atoi(tempCheck)-1].head->suit;
-                card[0] = tmp1;
-                card[1] = tmp2;
-                card[2] = '\0';
+
+        int cToSelect = atoi(tempCheck)-1;
+        if(board->column[cToSelect].size < 1){
+            return cmd;
+        }
+        if ((from[0] == 'C' || from[0] == 'F') && cToSelect > -1) {
+            char tmp1 = board->column[cToSelect].head->order;
+            char tmp2 = board->column[cToSelect].head->suit;
+            card[0] = tmp1;
+            card[1] = tmp2;
+            card[2] = '\0';
             addCommand(&cmd, to, from, card);
-            }else {
-            if (from[0] == 'F' && *tempCheck) {
-                    char tmp1 = board->foundation[atoi(tempCheck)-1].head->order;
-                    char tmp2 = board->foundation[atoi(tempCheck)-1].head->suit;
-                    card[0] = tmp1;
-                    card[1] = tmp2;
-                    card[2] = '\0';
-                addCommand(&cmd, to, from, card);
-            }
+
+        }else if(from[0] == 'F' && cToSelect > -1) {
+            char tmp1 = board->foundation[cToSelect].head->order;
+            char tmp2 = board->foundation[cToSelect].head->suit;
+            card[0] = tmp1;
+            card[1] = tmp2;
+            card[2] = '\0';
+            addCommand(&cmd, to, from, card);
         }
     }else if(strcmp(str,"UNDO") == 0 || strcmp(str,"undo") == 0){
         if(cmd->prevCommand == NULL){
             cmd = NULL;
         }else{
             addCommand(&cmd,cmd->prevCommand->moveFrom,cmd->prevCommand->moveTo,cmd->prevCommand->card);
-            if(cmd->prevCommand->moveTo[0] == 'F'){
-                char *fromDigit = strdup(cmd->prevCommand->moveFrom);
-                while (*fromDigit && !isdigit(*fromDigit))
-                    ++fromDigit;
-                char *toDigit = strdup(cmd->prevCommand->moveTo);
-                while(*toDigit && !isdigit(*toDigit))
-                    ++toDigit;
-                if(*toDigit && *fromDigit)
-                moveCard(&board->foundation[atoi(toDigit-1)],&board->column[atoi(fromDigit)-1], findCard(board->foundation[atoi(fromDigit)-1].head, cmd->card[1], cmd->card[0]));
-            }else{
-
-            }
-
-
         }
-    }else if(strcmp(str, "REDO") == 0 || strcmp(str,"redo") == 0){
-        addCommand(&cmd,cmd->nextCommand->moveTo,cmd->nextCommand->moveFrom,cmd->nextCommand->card);
     }
     return cmd;
 }
@@ -111,6 +99,9 @@ Command *playCommand(Board *board,char *str){
  * @author Asbjørn Nielsen
  */
 int doCommand(Board *board, Command *com) {
+    if(!com){
+        return 0;
+    }
     int toReturn = 0;
     char *fromDigit = strdup(com->moveFrom);
     while (*fromDigit && !isdigit(*fromDigit))

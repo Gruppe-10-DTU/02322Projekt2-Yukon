@@ -256,17 +256,25 @@ int testMoveIsValid(){
     foundation->head = NULL;
     foundation->tail = NULL;
 
-    appendToColumn(column1, queenSpades);
-    appendToColumn(column1, kingHearts);
-    appendToColumn(column2, aceClubs);
-    appendToColumn(column2, jackHearts);
+    addToColumn(column1, kingHearts);
+    addToColumn(column1, queenSpades);
+
+    addToColumn(column2, jackHearts);
+    addToColumn(column2, aceClubs);
     //SETUP FINISH
 
-    //TEST
+    /*
+     *   TESTING
+     */
+    //normal move
     if (!(moveIsValid(jackHearts, column1, 0))) result++;
+    //Moving ace to foundation
     if (!(moveIsValid(aceClubs, foundation, 1))) result++;
-    if (!(moveIsValid(jackHearts, column1, 0))) result++;
+    //Testing moving king to empty column
     if (!(moveIsValid(kingHearts, column3, 0))) result++;
+    //Testing Invalid moves
+    if ((moveIsValid(kingHearts, column1,0))) result++;
+    if ((moveIsValid(kingHearts, column2,0))) result++;
 
     //TEARDOWN
     free(queenSpades);

@@ -55,32 +55,26 @@ Command *playCommand(Board *board,char *str){
         char *from = strtok(tmp, "-");
         char *to = strtok(NULL, ">");
         char *card = (char*) malloc(sizeof strlen(tmp)+2);
-        if (from[0] == 'C') {
-            char *tempCheck = strdup(from);
-            while (*tempCheck && !isdigit(*tempCheck))
-                ++tempCheck;
-            if(*tempCheck) {
+        char *tempCheck = strdup(from);
+        while (*tempCheck && !isdigit(*tempCheck))
+            ++tempCheck;
+        if ((from[0] == 'C' || from[0] == 'F') && *tempCheck) {
                 char tmp1 = board->column[atoi(tempCheck)-1].head->order;
                 char tmp2 = board->column[atoi(tempCheck)-1].head->suit;
                 card[0] = tmp1;
                 card[1] = tmp2;
                 card[2] = '\0';
-            }
-        } else {
-            if (from[0] == 'F') {
-                char *tempCheck = strdup(from);
-                while (*tempCheck && !isdigit(*tempCheck))
-                    ++tempCheck;
-                if(*tempCheck) {
+            addCommand(&cmd, to, from, card);
+            }else {
+            if (from[0] == 'F' && *tempCheck) {
                     char tmp1 = board->foundation[atoi(tempCheck)-1].head->order;
                     char tmp2 = board->foundation[atoi(tempCheck)-1].head->suit;
                     card[0] = tmp1;
                     card[1] = tmp2;
                     card[2] = '\0';
-                }
+                addCommand(&cmd, to, from, card);
             }
         }
-        addCommand(&cmd, to, from, card);
     }else if(strcmp(str,"UNDO") == 0 || strcmp(str,"undo") == 0){
         if(cmd->prevCommand == NULL){
             cmd = NULL;
@@ -112,23 +106,23 @@ int doCommand(Board *board, Command *com) {
     char *toDigit = strdup(com->moveTo);
     while(*toDigit && !isdigit(*toDigit))
         ++toDigit;
-    if (com->moveFrom[0] == 'F') {
+    if (com->moveFrom[0] == 'F' && *fromDigit && *toDigit) {
         if (moveIsValid(findCard(board->foundation[atoi(fromDigit)-1].head, com->card[1], com->card[0]),
                         &board->column[atoi(toDigit)-1], 0) == 1) {
-            moveCard(&board->foundation[atoi(fromDigit)-1], &board->column[(int) com->moveTo[1]],
+            moveCard(&board->foundation[atoi(fromDigit)-1], &board->column[atoi(toDigit)],
                      findCard(board->foundation->head, com->card[1], com->card[0]));
             toReturn = 1;
         }
     }else{
-        if(com->moveTo[0] == 'C'){
+        if(com->moveTo[0] == 'C' && *fromDigit && *toDigit){
             if (moveIsValid(
                     findCard(board->column[atoi(fromDigit)-1].head, com->card[1], com->card[0]),
                     &board->column[atoi(toDigit)-1], 0) == 1) {
-                moveCard(&board->column[atoi(fromDigit)-1], &board->column[(int) com->moveTo[1]],
+                moveCard(&board->column[atoi(fromDigit)-1], &board->column[atoi(toDigit)],
                          findCard(board->column[atoi(fromDigit)-1].head, com->card[1], com->card[0]));
                 toReturn = 1;
             }
-        }else if(com->moveTo[0] == 'F'){
+        }else if(com->moveTo[0] == 'F' && *fromDigit && *toDigit){
             if (moveIsValid(
                     findCard(board->column[atoi(fromDigit) - 1].head, com->card[1], com->card[0]),
                     &board->foundation[atoi(toDigit)-1],1) == 1) {

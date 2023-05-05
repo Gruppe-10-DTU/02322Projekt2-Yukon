@@ -79,8 +79,20 @@ Command *playCommand(Board *board,char *str){
         if(cmd->prevCommand == NULL){
             cmd = NULL;
         }else{
-            //IT IS UNDO, IT IS MEANT TO BE THIS WAY!
             addCommand(&cmd,cmd->prevCommand->moveFrom,cmd->prevCommand->moveTo,cmd->prevCommand->card);
+            if(cmd->prevCommand->moveTo[0] == 'F'){
+                char *fromDigit = strdup(cmd->prevCommand->moveFrom);
+                while (*fromDigit && !isdigit(*fromDigit))
+                    ++fromDigit;
+                char *toDigit = strdup(cmd->prevCommand->moveTo);
+                while(*toDigit && !isdigit(*toDigit))
+                    ++toDigit;
+                if(*toDigit && *fromDigit)
+                moveCard(&board->foundation[atoi(toDigit-1)],&board->column[atoi(fromDigit)-1], findCard(board->foundation[atoi(fromDigit)-1].head, cmd->card[1], cmd->card[0]));
+            }else{
+
+            }
+
 
         }
     }else if(strcmp(str, "REDO") == 0 || strcmp(str,"redo") == 0){
@@ -109,7 +121,7 @@ int doCommand(Board *board, Command *com) {
     if (com->moveFrom[0] == 'F' && *fromDigit && *toDigit) {
         if (moveIsValid(findCard(board->foundation[atoi(fromDigit)-1].head, com->card[1], com->card[0]),
                         &board->column[atoi(toDigit)-1], 0) == 1) {
-            moveCard(&board->foundation[atoi(fromDigit)-1], &board->column[atoi(toDigit)],
+            moveCard(&board->foundation[atoi(fromDigit)-1], &board->column[atoi(toDigit)-1],
                      findCard(board->foundation->head, com->card[1], com->card[0]));
             toReturn = 1;
         }
@@ -118,7 +130,7 @@ int doCommand(Board *board, Command *com) {
             if (moveIsValid(
                     findCard(board->column[atoi(fromDigit)-1].head, com->card[1], com->card[0]),
                     &board->column[atoi(toDigit)-1], 0) == 1) {
-                moveCard(&board->column[atoi(fromDigit)-1], &board->column[atoi(toDigit)],
+                moveCard(&board->column[atoi(fromDigit)-1], &board->column[atoi(toDigit)-1],
                          findCard(board->column[atoi(fromDigit)-1].head, com->card[1], com->card[0]));
                 toReturn = 1;
             }

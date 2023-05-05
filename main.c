@@ -75,6 +75,7 @@ void startGame(Board* board) {
     }
 }
 
+
 int main() {
     char *statusMsg = (char *) calloc(100, sizeof(char));
     char *cmd = NULL;
@@ -140,13 +141,11 @@ int main() {
             printBoard(board);
             printGameConsole(cmd,statusMsg);
             break;
-
         }else{
             strcpy(statusMsg, "Unknown command. See read me for available commands.");
             clearView();
             printBoard(board);
             printGameConsole(cmd,statusMsg);
-            //TO BE IMPLEMENTED (Return error status).
         }
     }
     free(cmd);

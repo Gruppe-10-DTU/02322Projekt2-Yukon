@@ -59,31 +59,31 @@ void appendToColumn(Column *pColumn, Card *pCard) {
  * @author Philip Astrup Cramer
  */
 void moveCard(Column *from, Column *to, Card *mvCard){
-    Card *current = (from)->head;
+    Card *current = NULL;
     int mvCount = 1;
     //Iterates through the 'from' column until match or end is found
-    while(current->suit != mvCard->suit && current->order != mvCard->order){
-        current = current->nextCard;
+    for(current = from->head; current != mvCard; current = current->nextCard){
         mvCount++;
         if(current == NULL) return;
     }
     //updates the head of the 'from' column
-    (from)->head = current->nextCard;
-    if((from)->head == NULL){
-        (from)->tail = NULL;
+    from->head = current->nextCard;
+    if(!from->head){
+        from->tail = NULL;
     }else {
-        (from)->head->prevCard = NULL;
+        from->head->prevCard = NULL;
     }
-    (from)->size -= mvCount;
+    from->size -= mvCount;
 
     //Moves the card and finds new head of the column
-    current->nextCard = (to)->head;
-    if((to)->tail == NULL) (to)->tail = current;
-    while(current->prevCard != NULL){
-        current = current->prevCard;
+
+    current->nextCard = to->head;
+    if(to->head) to->head->prevCard = current;
+    if(!to->tail) to->tail = current;
+    for(current = current; current->prevCard; current = current->prevCard){
     }
-    (to)->head = current;
-    (to)->size += mvCount;
+    to->head = current;
+    to->size += mvCount;
 }
 
 /**
@@ -96,9 +96,11 @@ void moveCard(Column *from, Column *to, Card *mvCard){
  */
 int moveIsValid(Card *mvCard, Column *to, int toFoundation){
     if(!((mvCard)->visible)) return 0;
+    for(Card *temp = to->head; temp; temp = temp->nextCard)
+        if(temp == mvCard) return 0;
     char mvSuit = (mvCard)->suit;
     char mvOrder = (mvCard)->order;
-    if ((to)->head == NULL && ((toFoundation && mvOrder == 'A') || (!toFoundation && mvOrder == 'K'))) return 1;
+    if (to->head == NULL && ((!mvCard->prevCard && toFoundation && mvOrder == 'A') || (!toFoundation && mvOrder == 'K'))) return 1;
     else if ((to)->head == NULL) return 0;
     char toSuit = (to)->head->suit;
     char toOrder = (to)->head->order;
@@ -108,7 +110,7 @@ int moveIsValid(Card *mvCard, Column *to, int toFoundation){
         if(toOrder - mvOrder ==  1 * direction) return 1;           // normal number difference
         else if (toOrder - mvOrder == -6 * direction) return 1;     // K - Q
         else if (toOrder - mvOrder == 7 * direction) return 1;      // Q - J
-        else if (toOrder - mvOrder == -10 * direction) return 1;    // Q - J
+        else if (toOrder - mvOrder == -10 * direction) return 1;    // J - T
         else if (toOrder - mvOrder == 27 * direction) return 1;     // T - 9
         else if (toOrder - mvOrder == -15 * direction) return 1;    // 2 - A
         else return 0;

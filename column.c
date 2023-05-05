@@ -73,11 +73,10 @@ void moveCard(Column *from, Column *to, Card *mvCard) {
     } else {
         from->head->prevCard = NULL;
     }
-    if (from->head->visible != 1){
+    if (from->head != NULL && from->head->visible != 1) {
         from->head->visible = 1;
     }
     from->size -= mvCount;
-
     //Moves the card and finds new head of the column
 
     current->nextCard = to->head;

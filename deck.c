@@ -96,6 +96,69 @@ void freeDeck(Card *head){
     }
 }
 
+/**
+ * Splits the deck based on a split index.
+ * @param head The deck you want split
+ * @param splitIndex The size of the first bunk. Set -1 if you want it done randomly.
+ * If set to 0 or 52, it will just return the deck unchanged.
+ */
+void split(Card **head, int splitIndex){
+    Card *firstDeck = *head, *secondDeck = firstDeck, *shufflePile;
+    if(splitIndex == -1){
+        splitIndex = (rand() % (52));
+    }else if(splitIndex == 0 || splitIndex >= 52 || head == NULL){
+        return;
+    }
+    for (int i = 0; i < splitIndex; ++i) {
+        secondDeck = secondDeck->nextCard;
+        firstDeck = firstDeck->nextCard;
+    }
+    firstDeck = firstDeck->prevCard;
+    firstDeck->nextCard = NULL;
+    for (int i = 1; i < splitIndex; ++i) {
+        firstDeck = firstDeck->prevCard;
+    }
+
+    //Clean up the previous card on the two decks.
+    firstDeck->prevCard = NULL;
+    secondDeck->prevCard = NULL;
+
+    //Set the shuffle pile to the first card of the first deck
+    shufflePile = firstDeck;
+    firstDeck = firstDeck->nextCard;
+
+    while(firstDeck != NULL && secondDeck != NULL){
+        shufflePile->nextCard = secondDeck;
+        secondDeck->prevCard = shufflePile;
+        shufflePile = shufflePile->nextCard;
+        secondDeck = secondDeck->nextCard;
+
+        shufflePile->nextCard = firstDeck;
+        firstDeck->prevCard = shufflePile;
+        shufflePile = shufflePile->nextCard;
+        firstDeck = firstDeck->nextCard;
+    }
+    if(firstDeck == NULL){
+        while(secondDeck != NULL){
+            shufflePile->nextCard = secondDeck;
+            secondDeck->prevCard = shufflePile;
+            shufflePile = shufflePile->nextCard;
+            secondDeck = secondDeck->nextCard;
+        }
+    }else{
+        while(firstDeck != NULL){
+            shufflePile->nextCard = firstDeck;
+            firstDeck->prevCard = shufflePile;
+            shufflePile = shufflePile->nextCard;
+            firstDeck = firstDeck->nextCard;
+        }
+    }
+    *head = shufflePile;
+}
+
+
+
+
 
 
 

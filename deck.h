@@ -24,4 +24,6 @@ int countDeck(Card *head);
 
 void shuffle(Card **head);
 
+void split(Card **head, int split);
+
 #endif //INC_02322PROJEKT2_YUKON_DECK_H

@@ -106,14 +106,14 @@ int moveIsValid(Card *mvCard, Column *to, int toFoundation){
     char toOrder = (to)->head->order;
     int direction = 1;
     if(toFoundation) direction *= -1;
+    char deck0rder[14] = {NULL, 'A', '2','3','4','5','6','7','8','9','T','J','Q','K'};
     if((mvSuit != toSuit) ^ (toFoundation)){                        // if to foundation suit's cant match
-        if(toOrder - mvOrder ==  1 * direction) return 1;           // normal number difference
-        else if (toOrder - mvOrder == -6 * direction) return 1;     // K - Q
-        else if (toOrder - mvOrder == 7 * direction) return 1;      // Q - J
-        else if (toOrder - mvOrder == -10 * direction) return 1;    // J - T
-        else if (toOrder - mvOrder == 27 * direction) return 1;     // T - 9
-        else if (toOrder - mvOrder == -15 * direction) return 1;    // 2 - A
-        else return 0;
+        int mvOrderval, toOrderVal;
+        for (int i = 1; i < 14; i++){                               //
+            if(mvOrder == deck0rder[i]) mvOrderval = i;             // Translates the char value of the card to an integer
+            if(toOrder == deck0rder[i]) toOrderVal = i;             //
+        }
+        if(toOrderVal - mvOrderval == 1 * direction) return 1;      // Difference between cards must be 1
     }
     return 0;
 }

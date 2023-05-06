@@ -93,16 +93,15 @@ Command *playCommand(Board *board,char *str){
  *
  * @param board Board the command should be execute on.
  * @param com The command
- * @param fromForC Do they move from F or C?
  * @return returns 1 if doable, otherwise returns 0.
  *
  * @author Asbjørn Nielsen
  */
 int doCommand(Board *board, Command *com) {
-    if(!com){
-        return 0;
-    }
     int toReturn = 0;
+    if(!com){
+        return toReturn;
+    }
     char *fromDigit = strdup(com->moveFrom);
     while (*fromDigit && !isdigit(*fromDigit))
         ++fromDigit;
@@ -114,28 +113,35 @@ int doCommand(Board *board, Command *com) {
     int from = atoi(fromDigit)-1;
     if(isdigit(to) == 0 && isdigit(from) == 0) {
         if (com->moveFrom[0] == 'F') {
+            Card *cardToFind = findCard(board->column[from].head,com->card[1],com->card[0]);
             if (moveIsValid(findCard(board->foundation[from].head, com->card[1], com->card[0]),
-                            &board->column[to], 0) == 1) {
+                            &board->column[to], 0) == 1 && cardToFind != NULL) {
                 moveCard(&board->foundation[from], &board->column[to],
-                         findCard(board->foundation->head, com->card[1], com->card[0]));
+                         cardToFind);
                 toReturn = 1;
             }
         } else {
-            if (com->moveTo[0] == 'C') {
-                if (moveIsValid(
-                        findCard(board->column[from].head, com->card[1], com->card[0]),
-                        &board->column[to], 0) == 1) {
-                    moveCard(&board->column[from], &board->column[to],
-                             findCard(board->column[from].head, com->card[1], com->card[0]));
-                    toReturn = 1;
+            if (com->moveTo[0] == 'C' && board->column[from].head != NULL) {
+                if (findCard(board->column[from].head, com->card[1], com->card[0]) != NULL){
+                    Card *cardToFind = findCard(board->column[from].head, com->card[1], com->card[0]);
+                    if (moveIsValid(
+                            findCard(board->column[from].head, com->card[1], com->card[0]),
+                            &board->column[to], 0) == 1 && cardToFind != NULL) {
+                        moveCard(&board->column[from], &board->column[to],
+                                 cardToFind);
+                        toReturn = 1;
+                    }
                 }
-            } else if (com->moveTo[0] == 'F') {
-                if (moveIsValid(
-                        findCard(board->column[from].head, com->card[1], com->card[0]),
-                        &board->foundation[to], 1) == 1) {
-                    moveCard(&board->column[from], &board->foundation[to],
-                             findCard(board->column[from].head, com->card[1], com->card[0]));
-                    toReturn = 1;
+            } else if (com->moveTo[0] == 'F' && board->column[from].head != NULL) {
+                if (findCard(board->column[from].head, com->card[1], com->card[0]) != NULL){
+                    Card *cardToFind = findCard(board->column[from].head, com->card[1], com->card[0]);
+                    if (moveIsValid(
+                            findCard(board->column[from].head, com->card[1], com->card[0]),
+                            &board->foundation[to], 1) == 1 && cardToFind != NULL) {
+                        moveCard(&board->column[from], &board->foundation[to],
+                                 cardToFind);
+                        toReturn = 1;
+                    }
                 }
             }
         }

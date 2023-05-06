@@ -113,12 +113,14 @@ int doCommand(Board *board, Command *com) {
     int from = atoi(fromDigit)-1;
     if(isdigit(to) == 0 && isdigit(from) == 0) {
         if (com->moveFrom[0] == 'F') {
-            Card *cardToFind = findCard(board->column[from].head,com->card[1],com->card[0]);
-            if (moveIsValid(findCard(board->foundation[from].head, com->card[1], com->card[0]),
-                            &board->column[to], 0) == 1 && cardToFind != NULL) {
-                moveCard(&board->foundation[from], &board->column[to],
-                         cardToFind);
-                toReturn = 1;
+            if(findCard(board->column[from].head,com->card[1],com->card[0]) != NULL){
+                Card *cardToFind = findCard(board->column[from].head,com->card[1],com->card[0]);
+                if (moveIsValid(findCard(board->foundation[from].head, com->card[1], com->card[0]),
+                                &board->column[to], 0) == 1 && cardToFind != NULL) {
+                    moveCard(&board->foundation[from], &board->column[to],
+                             cardToFind);
+                    toReturn = 1;
+                }
             }
         } else {
             if (com->moveTo[0] == 'C' && board->column[from].head != NULL) {

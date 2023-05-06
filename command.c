@@ -43,7 +43,7 @@ int convertToDigit(char *str){
     return toReturn;
 }
 Command *undoCommand(Board *board, Command *com){
-    if(com == NULL || com->prevCommand == NULL){
+    if(com == NULL){
         return NULL;
     }
     char *moveFrom = com->moveFrom;
@@ -57,10 +57,10 @@ Command *undoCommand(Board *board, Command *com){
     } else {
         if (moveTo[0] == 'C') {
             Card *cardToUndo = findCard(board->column[toDigit].head, card[1], card[0]);
-            moveCard(&board->column[fromDigit], &board->column[toDigit], cardToUndo);
+            moveCard(&board->column[toDigit], &board->column[fromDigit], cardToUndo);
         } else if (moveTo[0] == 'F') {
             Card *cardToUndo = findCard(board->foundation[toDigit].head,card[1],card[0]);
-            moveCard(&board->foundation[fromDigit], &board->column[toDigit], cardToUndo);
+            moveCard(&board->foundation[toDigit], &board->column[fromDigit], cardToUndo);
         }
     }
     return com->prevCommand;

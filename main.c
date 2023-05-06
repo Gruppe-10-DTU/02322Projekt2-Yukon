@@ -43,7 +43,7 @@ void startGame(Board* board) {
             break;
         }
         //Check to see if the input is one of the variants of valid commands.
-        if (moveCmd[2] == ':' || moveCmd[2] == '-' || strcmp(moveCmd,"UNDO") == 0 || strcmp(moveCmd,"REDO") == 0) {
+        if (moveCmd[2] == ':' || moveCmd[2] == '-') {
             cmd = playCommand(board, moveCmd);
             int doable = doCommand(board, cmd);
             if (doable == 1) {
@@ -52,6 +52,8 @@ void startGame(Board* board) {
             } else if (doable == 0) {
                 status = "Invalid Move";
             }
+        }else if(strcmp(moveCmd,"UNDO") == 0 || strcmp(moveCmd,"undo") == 0){
+            undoCommand(board,cmd);
         }else {
             status = "Invalid Move";
             clearView();

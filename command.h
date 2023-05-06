@@ -22,5 +22,5 @@ typedef struct command{
 
 void addCommand(Command **head, char *moveTo, char *moveFrom, char *card);
 Command *playCommand(Board *board,char *str);
-
+Command *undoCommand(Board *board, Command *com);
 int doCommand(Board *board, Command *com);

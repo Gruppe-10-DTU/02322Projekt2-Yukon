@@ -23,7 +23,6 @@ void addCommand(Command **head, char *moveTo, char *moveFrom, char *card){
     cmd->moveTo = moveTo;
     cmd->moveFrom = moveFrom;
     cmd->card = card;
-    cmd->prevCommand = NULL;
     if (*head == NULL){
         *head = cmd;
         cmd->nextCommand = NULL;
@@ -33,6 +32,39 @@ void addCommand(Command **head, char *moveTo, char *moveFrom, char *card){
         *head = cmd;
     }
 };
+
+
+int convertToDigit(char *str){
+    int toReturn = 0;
+    char *tmp = strdup(str);
+    while (*tmp && !isdigit(*tmp))
+        ++tmp;
+    toReturn = atoi(tmp);
+    return toReturn;
+}
+Command *undoCommand(Board *board, Command *com){
+    if(com == NULL || com->prevCommand == NULL){
+        return NULL;
+    }
+    char *moveFrom = com->moveFrom;
+    char *moveTo = com->moveTo;
+    char *card = com->card;
+    int fromDigit = convertToDigit(moveFrom) - 1;
+    int toDigit = convertToDigit(moveTo) - 1;
+    if (moveFrom[0] == 'F') {
+        Card *cardToFind = board->column[fromDigit].head;
+        moveCard(&board->column[toDigit], &board->column[fromDigit], cardToFind);
+    } else {
+        if (moveTo[0] == 'C') {
+            Card *cardToUndo = findCard(board->column[toDigit].head, card[1], card[0]);
+            moveCard(&board->column[fromDigit], &board->column[toDigit], cardToUndo);
+        } else if (moveTo[0] == 'F') {
+            Card *cardToUndo = findCard(board->foundation[toDigit].head,card[1],card[0]);
+            moveCard(&board->foundation[fromDigit], &board->column[toDigit], cardToUndo);
+        }
+    }
+    return com->prevCommand;
+}
 /**
  *
  * @param board The board we are playing the command on
@@ -49,21 +81,16 @@ Command *playCommand(Board *board,char *str){
         char *card = strtok(NULL,"-");
         char *to = strtok(NULL, ">");
         addCommand(&cmd, to, from, card);
-
     }
     else if(str[2] == '-') {
         char *from = strtok(tmp, "-");
         char *to = strtok(NULL, ">");
         char *card = (char*) malloc(sizeof strlen(tmp)+2);
-        char *tempCheck = strdup(from);
-        while (*tempCheck && !isdigit(*tempCheck))
-            ++tempCheck;
-
-        int cToSelect = atoi(tempCheck)-1;
+        int cToSelect = convertToDigit(str)-1;
         if(board->column[cToSelect].size < 1){
             return cmd;
         }
-        if ((from[0] == 'C' || from[0] == 'F') && cToSelect > -1) {
+        if ((from[0] == 'C' || from[0] == 'F') && cToSelect > -1){
             char tmp1 = board->column[cToSelect].head->order;
             char tmp2 = board->column[cToSelect].head->suit;
             card[0] = tmp1;
@@ -78,16 +105,14 @@ Command *playCommand(Board *board,char *str){
             card[1] = tmp2;
             card[2] = '\0';
             addCommand(&cmd, to, from, card);
-        }
-    }else if(strcmp(str,"UNDO") == 0 || strcmp(str,"undo") == 0){
-        if(cmd->prevCommand == NULL){
-            cmd = NULL;
         }else{
-            addCommand(&cmd,cmd->prevCommand->moveFrom,cmd->prevCommand->moveTo,cmd->prevCommand->card);
+
         }
     }
     return cmd;
 }
+
+
 
 /**
  *

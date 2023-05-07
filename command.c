@@ -18,20 +18,6 @@
  *
  * @author Asbjørn Nielsen
  */
-void addCommand(Command **head, char *moveTo, char *moveFrom, char *card){
-    Command *cmd = (Command *) malloc(sizeof(Command));
-    cmd->moveTo = moveTo;
-    cmd->moveFrom = moveFrom;
-    cmd->card = card;
-    if (*head == NULL){
-        *head = cmd;
-        cmd->nextCommand = NULL;
-    } else{
-        cmd->nextCommand = *head;
-        (*head)->prevCommand = cmd;
-        *head = cmd;
-    }
-};
 
 
 int convertToDigit(char *str){
@@ -42,9 +28,9 @@ int convertToDigit(char *str){
     toReturn = atoi(tmp);
     return toReturn;
 }
-Command *undoCommand(Board *board, Command *com){
+void undoCommand(Board *board, Command *com){
     if(com == NULL){
-        return NULL;
+        return;
     }
     char *moveFrom = com->moveFrom;
     char *moveTo = com->moveTo;
@@ -63,8 +49,8 @@ Command *undoCommand(Board *board, Command *com){
             moveCard(&board->foundation[toDigit], &board->column[fromDigit], cardToUndo);
         }
     }
-    return com->prevCommand;
 }
+
 /**
  *
  * @param board The board we are playing the command on
@@ -74,41 +60,42 @@ Command *undoCommand(Board *board, Command *com){
  * @author Asbjørn Nielsen
  */
 Command *playCommand(Board *board,char *str){
-    Command *cmd = NULL;
     char *tmp = strdup(str);
+    char *from;
+    char *card;
+    char *to;
     if(str[2] ==':'){
-        char *from = strtok(tmp, ":");
-        char *card = strtok(NULL,"-");
-        char *to = strtok(NULL, ">");
-        addCommand(&cmd, to, from, card);
+        from = strtok(tmp, ":");
+        card = strtok(NULL,"-");
+        to = strtok(NULL, ">");
     }
     else if(str[2] == '-') {
-        char *from = strtok(tmp, "-");
-        char *to = strtok(NULL, ">");
-        char *card = (char*) malloc(sizeof strlen(tmp)+2);
+        from = strtok(tmp, "-");
+
         int cToSelect = convertToDigit(str)-1;
         if(board->column[cToSelect].size < 1){
-            return cmd;
+            return NULL;
         }
         if ((from[0] == 'C' || from[0] == 'F') && cToSelect > -1){
-            char tmp1 = board->column[cToSelect].head->order;
-            char tmp2 = board->column[cToSelect].head->suit;
-            card[0] = tmp1;
-            card[1] = tmp2;
-            card[2] = '\0';
-            addCommand(&cmd, to, from, card);
-
+            to = &board->column[cToSelect].head->order;
+            from = &board->column[cToSelect].head->suit;
+            card = '\0';
         }else if(from[0] == 'F' && cToSelect > -1) {
-            char tmp1 = board->foundation[cToSelect].head->order;
-            char tmp2 = board->foundation[cToSelect].head->suit;
-            card[0] = tmp1;
-            card[1] = tmp2;
-            card[2] = '\0';
-            addCommand(&cmd, to, from, card);
-        }else{
-
+            to = &board->foundation[cToSelect].head->order;
+            from = &board->foundation[cToSelect].head->suit;
+            card = '\0';
+        } else {
+            return NULL;
         }
+    } else {
+        return NULL;
     }
+    Command *cmd = (Command *) malloc(sizeof(Command));
+    cmd->nextCommand = NULL;
+    cmd->prevCommand = NULL;
+    cmd->moveTo = to;
+    cmd->moveFrom = from;
+    cmd->card = card;
     return cmd;
 }
 

@@ -25,7 +25,10 @@ int hasWon(Board *board){
  * @author Asbjørn Nielsen, Nilas Thørgsen.
  */
 void startGame(Board* board) {
+    //Head of the cmd line
+    Command *cmdHead = NULL;
     Command *cmd = NULL;
+
     char *moveCmd = NULL;
     char *lastMove = (char *) malloc(sizeof moveCmd);
     char *status = (char *) malloc(sizeof status);
@@ -44,16 +47,34 @@ void startGame(Board* board) {
         }
         //Check to see if the input is one of the variants of valid commands.
         if (moveCmd[2] == ':' || moveCmd[2] == '-') {
+            //Create the command
             cmd = playCommand(board, moveCmd);
+
             int doable = doCommand(board, cmd);
             if (doable == 1) {
                 lastMove = moveCmd;
+                cmdHead->nextCommand = cmd;
+                cmd->prevCommand = cmdHead;
+                cmdHead = cmd;
                 status = "OK";
             } else if (doable == 0) {
                 status = "Invalid Move";
             }
         }else if(strcmp(moveCmd,"UNDO") == 0 || strcmp(moveCmd,"undo") == 0){
-            undoCommand(board,cmd);
+            if(cmdHead->prevCommand != NULL){
+                undoCommand(board,cmdHead);
+                cmdHead = cmdHead->prevCommand;
+            }else{
+                status = "No move to undo";
+            }
+        }
+        else if(strcmp(moveCmd,"REDO") == 0 || strcmp(moveCmd,"redo") == 0) {
+            if (cmdHead->nextCommand != NULL) {
+                doCommand(board, cmdHead);
+                cmdHead = cmdHead->nextCommand;
+            } else {
+                status = "No move to redo";
+            }
         }else {
             status = "Invalid Move";
             clearView();

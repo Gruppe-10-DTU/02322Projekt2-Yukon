@@ -9,17 +9,15 @@
 #include "string.h"
 #include "board.h"
 #include <ctype.h>
+
+
 /**
- * Command cards in a linked-list structure.
- * @param head Head of commands
- * @param moveTo Where the commands moves the card to
- * @param moveFrom Where the commands moves the cards from
- * @param card Suit and order of card we wish to move.
+ *
+ * @param str The string (with an integer) we want to convert to an integer.
+ * @return returns the integer value int the string.
  *
  * @author Asbjørn Nielsen
  */
-
-
 int convertToDigit(char *str){
     int toReturn = 0;
     char *tmp = strdup(str);
@@ -28,6 +26,13 @@ int convertToDigit(char *str){
     toReturn = atoi(tmp);
     return toReturn;
 }
+/**
+ *
+ * @param board The board we are undoing the command form
+ * @param com The command we want to undo
+ *
+ * @author Asbjørn Nielsen, Nilas Thørgsen
+ */
 void undoCommand(Board *board, Command *com){
     if(com == NULL){
         return;
@@ -57,12 +62,12 @@ void undoCommand(Board *board, Command *com){
  * @param str The loaded moveCmd string.
  * @return returns the reference to the command.
  *
- * @author Asbjørn Nielsen
+ * @author Asbjørn Nielsen, Nilas Thørgsen
  */
 Command *playCommand(Board *board,char *str){
     char *tmp = strdup(str);
     char *from;
-    char *card;
+    char *card = (char*) malloc(sizeof strlen(tmp)+2);
     char *to;
     if(str[2] ==':'){
         from = strtok(tmp, ":");
@@ -71,19 +76,27 @@ Command *playCommand(Board *board,char *str){
     }
     else if(str[2] == '-') {
         from = strtok(tmp, "-");
-
+        to = strtok(NULL, ">");
         int cToSelect = convertToDigit(str)-1;
         if(board->column[cToSelect].size < 1){
             return NULL;
         }
         if ((from[0] == 'C' || from[0] == 'F') && cToSelect > -1){
-            to = &board->column[cToSelect].head->order;
-            from = &board->column[cToSelect].head->suit;
-            card = '\0';
+            char tmp1 = board->column[cToSelect].head->order;
+            char tmp2 = board->column[cToSelect].head->suit;
+            card[0] = tmp1;
+            card[1] = tmp2;
+            card[3] = '\0';
+
         }else if(from[0] == 'F' && cToSelect > -1) {
             to = &board->foundation[cToSelect].head->order;
             from = &board->foundation[cToSelect].head->suit;
-            card = '\0';
+            char tmp1 = board->foundation[cToSelect].head->order;
+            char tmp2 = board->foundation[cToSelect].head->suit;
+            card[0] = tmp1;
+            card[1] = tmp2;
+            card[2] = '\0';
+
         } else {
             return NULL;
         }
@@ -114,15 +127,10 @@ int doCommand(Board *board, Command *com) {
     if(!com){
         return toReturn;
     }
-    char *fromDigit = strdup(com->moveFrom);
-    while (*fromDigit && !isdigit(*fromDigit))
-        ++fromDigit;
-    char *toDigit = strdup(com->moveTo);
-    while(*toDigit && !isdigit(*toDigit))
-        ++toDigit;
 
-    int to = atoi(toDigit)-1;
-    int from = atoi(fromDigit)-1;
+    int from = convertToDigit(com->moveFrom)-1;
+    int to = convertToDigit(com->moveTo)-1;
+
     if(isdigit(to) == 0 && isdigit(from) == 0) {
         if (com->moveFrom[0] == 'F') {
             if(findCard(board->column[from].head,com->card[1],com->card[0]) != NULL){

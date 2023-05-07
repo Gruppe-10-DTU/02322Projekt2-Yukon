@@ -8,7 +8,13 @@
 #include "string.h"
 #include "command.h"
 
-
+/**
+ *
+ * @param board the board we are playing on
+ * @return returns 1 if the total size of all foundations are equal to 52, 0 if the total size of all foundations less than 52
+ *
+ * @author Asbjørn Nielsen
+ */
 int hasWon(Board *board){
     int size = 0;
     for (int i = 0; i < 4; ++i) {
@@ -26,8 +32,8 @@ int hasWon(Board *board){
  */
 void startGame(Board* board) {
     //Head of the cmd line
-    Command *cmdHead = NULL;
-    Command *cmd = NULL;
+    Command *cmdHead = (Command*) malloc(sizeof(Command));
+    Command *cmd = (Command*) malloc(sizeof (Command));
 
     char *moveCmd = NULL;
     char *lastMove = (char *) malloc(sizeof moveCmd);

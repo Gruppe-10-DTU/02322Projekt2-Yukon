@@ -43,7 +43,7 @@ void startGame(Board* board) {
         //Used for debug only. Wouldn't print console output when debugging, found this solution online.
         setbuf(stdout, 0);
         printGameConsole(lastMove, status);
-        moveCmd = (char*) malloc(sizeof moveCmd);
+        moveCmd = (char*) realloc(moveCmd, sizeof moveCmd);
         scanf("%s", moveCmd);
         if (strcasecmp(moveCmd, "Q") == 0) {
             strcpy(status, "Exiting game...");

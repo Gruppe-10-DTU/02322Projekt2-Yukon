@@ -6,7 +6,6 @@
 #include "column.h"
 #include "command.h"
 #include <stdio.h>
-#include <conio.h>
 
 Board *createBoard(void){
     Board *board = (Board *) malloc(sizeof(Board));
@@ -160,6 +159,7 @@ void clearView(){
 #ifdef __linux__
     system("clear");
 #elif __WIN32__
+#include <conio.h>
     system("cls");
 #endif
 }

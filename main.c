@@ -7,6 +7,9 @@
 #include "stdio.h"
 #include "string.h"
 #include "command.h"
+#define INT_OFFSET 48
+
+int parseInteger(char *s2);
 
 /**
  *
@@ -101,7 +104,7 @@ void startGame(Board* board) {
 
 int main() {
     char *statusMsg = (char *) calloc(100, sizeof(char));
-    char *cmd = NULL;
+    char *cmd = (char *) calloc(1024, sizeof(char));
     char *cmdS1 = (char *) malloc(sizeof cmdS1);
     char *cmdS2 = (char *) malloc(sizeof cmdS2);
     //Initial Setup
@@ -118,9 +121,10 @@ int main() {
     clearView();
     printTitle();
     while(1) {
-        scanf("%ms", &cmd);
-        cmdS1 = strtok(cmd, "<");
-        cmdS2 = strtok(NULL,">");
+        fgets(cmd, 1024,stdin);
+        cmd = strtok(cmd, "\n");
+        cmdS1 = strtok(cmd," ");
+        cmdS2 = strtok(NULL,"\n");
         if(strcasecmp(cmd,"P") == 0){
             if(!deck){
                 deck = newDeck(statusMsg);
@@ -149,7 +153,10 @@ int main() {
         }
         else if(strcasecmp(cmd,"SI") == 0){
             clearView();
-            split(&deck,2);
+            if(cmdS2) {
+                int splitIndex = parseInteger(cmdS2);
+                split(&deck, splitIndex);
+            }else split(&deck,2);
             printBoard(board);
             printGameConsole(cmd,"OK");
         }
@@ -183,4 +190,15 @@ int main() {
     if(deck) free(deck);
     free(statusMsg);
     return 0;
+}
+
+int parseInteger(char *s2) {
+    int result = 0;
+    int tmp = 0;
+    for(int i = 0; s2[i]; i++){
+        tmp = ((int) s2[i]) - INT_OFFSET;
+        result *= 10;
+        result += tmp;
+    }
+    return result;
 }

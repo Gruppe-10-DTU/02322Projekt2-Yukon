@@ -131,7 +131,7 @@ int doCommand(Board *board, Command *com) {
     int to = convertToDigit(com->moveTo)-1;
 
     if(isdigit(to) == 0 && isdigit(from) == 0) {
-        if ((com->moveFrom[0] == 'F' || com->moveFrom[0] == 'f') && from < 4 && to < 7) {
+        if ((com->moveFrom[0] == 'F' || com->moveFrom[0] == 'f') && from < 4 && from >= 0 && to < 7 && to >= 0) {
             if(findCard(board->column[from].head,com->card[1],com->card[0]) != NULL){
                 Card *cardToFind = findCard(board->column[from].head,com->card[1],com->card[0]);
                 if (moveIsValid(findCard(board->foundation[from].head, com->card[1], com->card[0]),
@@ -142,7 +142,7 @@ int doCommand(Board *board, Command *com) {
                 }
             }
         } else if(from < 7) {
-            if ((com->moveTo[0] == 'C' || com->moveTo[0] == 'c') && board->column[from].head != NULL && to < 7) {
+            if ((com->moveTo[0] == 'C' || com->moveTo[0] == 'c') && board->column[from].head != NULL && to < 7 && to >= 0) {
                 if (findCard(board->column[from].head, com->card[1], com->card[0]) != NULL){
                     Card *cardToFind = findCard(board->column[from].head, com->card[1], com->card[0]);
                     if (moveIsValid(
@@ -153,7 +153,7 @@ int doCommand(Board *board, Command *com) {
                         toReturn = 1;
                     }
                 }
-            } else if ((com->moveTo[0] == 'F' || com->moveTo[0] == 'f') && board->column[from].head != NULL && to < 4) {
+            } else if ((com->moveTo[0] == 'F' || com->moveTo[0] == 'f') && board->column[from].head != NULL && to < 4 && to >= 0) {
                 if (findCard(board->column[from].head, com->card[1], com->card[0]) != NULL){
                     Card *cardToFind = findCard(board->column[from].head, com->card[1], com->card[0]);
                     if (moveIsValid(

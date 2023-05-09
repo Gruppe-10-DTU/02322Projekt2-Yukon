@@ -105,6 +105,7 @@ int moveIsValid(Card *mvCard, Column *to, int toFoundation){
     char mvOrder = (mvCard)->order;
     if (to->head == NULL && ((!mvCard->prevCard && toFoundation && mvOrder == 'A') || (!toFoundation && mvOrder == 'K'))) return 1;
     else if ((to)->head == NULL) return 0;
+    if (toFoundation && !mvCard->prevCard) return 0;
     char toSuit = (to)->head->suit;
     char toOrder = (to)->head->order;
     int direction = 1;

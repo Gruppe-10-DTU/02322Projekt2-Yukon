@@ -127,6 +127,7 @@ int main() {
                 shuffle(&deck);
             }
             loadDeck(board,deck);
+            deck = NULL;
             startGame(board);
         }
         else if(strcasecmp(cmd,"LD") == 0){
@@ -178,7 +179,7 @@ int main() {
     }
     free(cmd);
     free(board);
-    free(deck);
+    if(deck) free(deck);
     free(statusMsg);
     return 0;
 }

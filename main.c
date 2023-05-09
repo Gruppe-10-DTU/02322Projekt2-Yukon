@@ -103,8 +103,8 @@ void startGame(Board* board) {
 int main() {
     char *statusMsg = (char *) calloc(100, sizeof(char));
     char *cmd = (char *) calloc(1024, sizeof(char));
-    char *cmdS1 = (char *) malloc(sizeof cmdS1);
-    char *cmdS2 = (char *) malloc(sizeof cmdS2);
+    char *cmdS1 = NULL;
+    char *cmdS2 = NULL;
     //Initial Setup
     clearView();
     printTitle();

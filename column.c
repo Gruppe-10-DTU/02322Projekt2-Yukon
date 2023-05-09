@@ -58,23 +58,25 @@ void appendToColumn(Column *pColumn, Card *pCard) {
  *
  * @author Philip Astrup Cramer
  */
-void moveCard(Column *from, Column *to, Card *mvCard){
+void moveCard(Column *from, Column *to, Card *mvCard) {
     Card *current = NULL;
     int mvCount = 1;
     //Iterates through the 'from' column until match or end is found
-    for(current = from->head; current != mvCard; current = current->nextCard){
+    for (current = from->head; current != mvCard; current = current->nextCard) {
         mvCount++;
-        if(current == NULL) return;
+        if (current == NULL) return;
     }
     //updates the head of the 'from' column
     from->head = current->nextCard;
-    if(!from->head){
+    if (!from->head) {
         from->tail = NULL;
-    }else {
+    } else {
         from->head->prevCard = NULL;
     }
+    if (from->head != NULL && from->head->visible != 1) {
+        from->head->visible = 1;
+    }
     from->size -= mvCount;
-
     //Moves the card and finds new head of the column
 
     current->nextCard = to->head;
@@ -106,7 +108,7 @@ int moveIsValid(Card *mvCard, Column *to, int toFoundation){
     char toOrder = (to)->head->order;
     int direction = 1;
     if(toFoundation) direction *= -1;
-    char deck0rder[14] = {NULL, 'A', '2','3','4','5','6','7','8','9','T','J','Q','K'};
+    char deck0rder[14] = {'\0', 'A', '2','3','4','5','6','7','8','9','T','J','Q','K'};
     if((mvSuit != toSuit) ^ (toFoundation)){                        // if to foundation suit's cant match
         int mvOrderval, toOrderVal;
         for (int i = 1; i < 14; i++){                               //
@@ -117,5 +119,7 @@ int moveIsValid(Card *mvCard, Column *to, int toFoundation){
     }
     return 0;
 }
+
+
 
 

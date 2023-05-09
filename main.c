@@ -4,31 +4,106 @@
 #include "filehandler.h"
 #include "deck.h"
 #include "board.h"
+#include "stdio.h"
+#include "string.h"
+#include "command.h"
 
-
-void startGame(Board* board, char *statusMsg){
-    char cmd[4] = {0};
-    while (!gameFinished(board)){
-        if(strcasecmp("Q", cmd) == 0){
-            strcpy(statusMsg, "Quitting game.");
-            clearBoard(board);
-            return;
-        } else if (!strcasecmp(cmd,"LD") || !strcasecmp(cmd,"SW") || !strcasecmp(cmd,"SR") ||
-            !strcasecmp(cmd,"SI") || !strcasecmp(cmd,"SD")){
-            strcpy(statusMsg, "Command not available in the PLAY phase");
-        }
-        clearView();
-        printBoard(board);
-        printGameConsole(cmd,statusMsg);
+/**
+ *
+ * @param board the board we are playing on
+ * @return returns 1 if the total size of all foundations are equal to 52, 0 if the total size of all foundations less than 52
+ *
+ * @author Asbjørn Nielsen
+ */
+int hasWon(Board *board){
+    int size = 0;
+    for (int i = 0; i < 4; ++i) {
+        size += board->foundation[i].size;
     }
+    if(size == 52)
+        return 1;
+    else
+        return 0;
+}
+/**
+ *
+ * @param board Board the game is started on
+ * @author Asbjørn Nielsen, Nilas Thørgsen.
+ */
+void startGame(Board* board) {
+    //Head of the cmd line
+    Command *cmdHead = (Command*) malloc(sizeof(Command));
+    Command *cmd = (Command*) malloc(sizeof (Command));
+
+    char *moveCmd = NULL;
+    char *lastMove = (char *) malloc(sizeof moveCmd);
+    char *status = (char *) malloc(sizeof status);
+    lastMove = NULL;
+    strcpy(status, "OK");
+    while (hasWon(board) != 1) {
+        moveCmd = NULL;
+        printBoard(board);
+        //Used for debug only. Wouldn't print console output when debugging, found this solution online.
+        setbuf(stdout, 0);
+        printGameConsole(lastMove, status);
+        scanf("%ms", &moveCmd);
+        if (strcasecmp(moveCmd, "Q") == 0) {
+            strcpy(status, "Exiting game...");
+            break;
+        }
+        //Check to see if the input is one of the variants of valid commands.
+        if (moveCmd[2] == ':' || moveCmd[2] == '-') {
+            //Create the command
+            cmd = playCommand(board, moveCmd);
+
+            int doable = doCommand(board, cmd);
+            if (doable == 1) {
+                lastMove = moveCmd;
+                cmdHead->nextCommand = cmd;
+                cmd->prevCommand = cmdHead;
+                cmdHead = cmd;
+                strcpy(status, "OK");
+            } else if (doable == 0) {
+                strcpy(status, "Invalid Move");
+            }
+        }else if(strcasecmp(moveCmd,"UNDO") == 0){
+            if(cmdHead->prevCommand != NULL){
+                undoCommand(board,cmdHead);
+                cmdHead = cmdHead->prevCommand;
+            }else{
+                strcpy(status, "No move to undo");
+            }
+        }
+        else if(strcasecmp(moveCmd,"REDO") == 0) {
+            if (cmdHead->nextCommand != NULL) {
+                doCommand(board, cmdHead);
+                cmdHead = cmdHead->nextCommand;
+            } else {
+                strcpy(status, "No move to redo");
+            }
+        }else {
+            strcpy(status, "Invalid Move");
+            clearView();
+        }
+    }
+    if (hasWon(board) == 1) {
+        printWin();
+    }
+    clearView();
+    printBoard(board);
+    printGameConsole(lastMove,status);
+    if(lastMove) free(lastMove);
+    free(moveCmd);
+    free(status);
+    free(cmd);
 }
 
 
 int main() {
+    char *statusMsg = (char *) calloc(100, sizeof(char));
     char *cmd = NULL;
     char *cmdS1 = (char *) malloc(sizeof cmdS1);
     char *cmdS2 = (char *) malloc(sizeof cmdS2);
-    char *statusMsg = (char *) calloc(100, sizeof(char));
     //Initial Setup
     clearView();
     printTitle();
@@ -36,60 +111,59 @@ int main() {
     //Reader
 
     //Nyt deck
-    Card *deck = NULL;
-    Board *board = createBoard();
+    Card *deck = newDeck("OK");
+    shuffle(&deck);
 
-    while (1) {
-        strcpy(statusMsg,"");
+    Board *board = createBoard();
+    clearView();
+    printTitle();
+    while(1) {
         scanf("%ms", &cmd);
-        char *split = strtok(cmd, "<");
-        cmdS1 = split;
-        split = strtok(NULL,">");
-        cmdS2 = split;
-        //printf("Command: %s\nArgument: %s\n", cmdS1, cmdS2);
-        if(strcasecmp(cmdS1,"P") == 0){
-            clearView();
-            if(deck) {
+        cmdS1 = strtok(cmd, "<");
+        cmdS2 = strtok(NULL,">");
+        if(strcasecmp(cmd,"P") == 0){
+            if(!deck){
+                deck = newDeck(statusMsg);
                 shuffle(&deck);
-                loadDeck(board, deck);
-                printBoard(board);
-                printGameConsole(cmdS1, "Game Started");
-                startGame(board, statusMsg);
-            }else {
-                printBoard(board);
-                printGameConsole(cmdS1, "No deck loaded.");
             }
+            loadDeck(board,deck);
+            deck = NULL;
+            startGame(board);
         }
-        else if(strcasecmp(cmdS1,"LD") == 0){
+        else if(strcasecmp(cmd,"LD") == 0){
+            clearView();
             if (cmdS2) {
                 deck = deckFromFile(cmdS2,statusMsg);
             } else deck = newDeck(statusMsg);
-            clearView();
-            showDeck(board, deck, 0);
-            printGameConsole(cmdS1,statusMsg);
+            if (deck) {
+                showDeck(board, deck, 0);
+            } else {
+                printBoard(board);
+            }
+            printGameConsole(cmd,statusMsg);
         }
-        else if(strcasecmp(cmdS1,"SW") == 0){
+        else if(strcasecmp(cmd,"SW") == 0){
             clearView();
             showDeck(board, deck, 1);
-            printGameConsole(cmdS1,"OK");
+            printGameConsole(cmd,"OK");
         }
-        else if(strcasecmp(cmdS1,"SI") == 0){
+        else if(strcasecmp(cmd,"SI") == 0){
             clearView();
             printBoard(board);
-            printGameConsole(cmdS1,"OK");
+            printGameConsole(cmd,"OK");
         }
-        else if(strcasecmp(cmdS1,"SR") == 0){
+        else if(strcasecmp(cmd,"SR") == 0){
             clearView();
             shuffle(&deck);
             printBoard(board);
-            printGameConsole(cmdS1,"OK");
+            printGameConsole(cmd,"OK");
         }
-        else if(strcasecmp(cmdS1,"SD") == 0){
+        else if(strcasecmp(cmd,"SD") == 0){
             clearView();
             printBoard(board);
-            printGameConsole(cmdS1,"OK");
+            printGameConsole(cmd,"OK");
         }
-        else if(strcasecmp(cmdS1,"QQ") == 0){
+        else if(strcasecmp(cmd,"QQ") == 0){
             strcpy(statusMsg, "Thank you for playing!");
             clearView();
             clearBoard(board);
@@ -103,10 +177,9 @@ int main() {
             printGameConsole(cmd,statusMsg);
         }
     }
-    free(cmdS1);
-    //free(cmdS2);
-    freeDeck(deck);
-    free(statusMsg);
+    free(cmd);
     free(board);
+    if(deck) free(deck);
+    free(statusMsg);
     return 0;
 }

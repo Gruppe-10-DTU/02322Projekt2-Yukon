@@ -47,7 +47,7 @@ void startGame(Board* board) {
         setbuf(stdout, 0);
         printGameConsole(lastMove, status);
         scanf("%ms", &moveCmd);
-        if (strcmp(moveCmd, "Q") == 0) {
+        if (strcasecmp(moveCmd, "Q") == 0) {
             printf("%s", "Exiting game...");
             break;
         }
@@ -66,7 +66,7 @@ void startGame(Board* board) {
             } else if (doable == 0) {
                 status = "Invalid Move";
             }
-        }else if(strcmp(moveCmd,"UNDO") == 0 || strcmp(moveCmd,"undo") == 0){
+        }else if(strcasecmp(moveCmd,"UNDO") == 0){
             if(cmdHead->prevCommand != NULL){
                 undoCommand(board,cmdHead);
                 cmdHead = cmdHead->prevCommand;
@@ -74,7 +74,7 @@ void startGame(Board* board) {
                 status = "No move to undo";
             }
         }
-        else if(strcmp(moveCmd,"REDO") == 0 || strcmp(moveCmd,"redo") == 0) {
+        else if(strcasecmp(moveCmd,"REDO") == 0) {
             if (cmdHead->nextCommand != NULL) {
                 doCommand(board, cmdHead);
                 cmdHead = cmdHead->nextCommand;
@@ -117,11 +117,11 @@ int main() {
         clearView();
         printTitle();
         scanf("%ms", &cmd);
-        if(strcmp(cmd,"P") == 0){
+        if(strcasecmp(cmd,"P") == 0){
             loadDeck(board,deck);
             startGame(board);
         }
-        else if(strcmp(cmd,"LD") == 0){
+        else if(strcasecmp(cmd,"LD") == 0){
             scanf("Enter filename: %s", cmd);
             deck = deckFromFile(cmd,"OK");
             loadDeck(board,deck);

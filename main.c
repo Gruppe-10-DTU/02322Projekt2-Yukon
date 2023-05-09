@@ -32,7 +32,7 @@ void startGame(Board* board) {
     Command *cmdHead = (Command*) malloc(sizeof(Command));
     Command *cmd = (Command*) malloc(sizeof (Command));
 
-    char *moveCmd = NULL;
+    char *moveCmd = (char*) malloc(sizeof moveCmd);
     char *lastMove = (char *) malloc(sizeof moveCmd);
     char *status = (char *) calloc(1024,sizeof(char));
     lastMove = NULL;
@@ -43,7 +43,6 @@ void startGame(Board* board) {
         //Used for debug only. Wouldn't print console output when debugging, found this solution online.
         setbuf(stdout, 0);
         printGameConsole(lastMove, status);
-        moveCmd = (char*) malloc(sizeof moveCmd);
         scanf("%s", moveCmd);
         if (strcasecmp(moveCmd, "Q") == 0) {
             strcpy(status, "Exiting game...");
@@ -96,6 +95,7 @@ void startGame(Board* board) {
     free(status);
     freeCommandList(cmdHead);
     free(cmd);
+    free(moveCmd);
     getchar();
 }
 

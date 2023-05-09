@@ -143,7 +143,11 @@ int main() {
         }
         else if(strcasecmp(cmd,"SW") == 0){
             clearView();
-            showDeck(board, deck, 1);
+            if (deck) showDeck(board, deck, 1);
+            else {
+                printBoard(board);
+                strcpy(statusMsg, "No Deck loaded");
+            }
             printGameConsole(cmd,"OK");
         }
         else if(strcasecmp(cmd,"SI") == 0){
@@ -157,8 +161,14 @@ int main() {
         }
         else if(strcasecmp(cmd,"SR") == 0){
             clearView();
-            shuffle(&deck);
-            showDeck(board, deck, 0);
+            if (deck) {
+                shuffle(&deck);
+                showDeck(board, deck, 0);
+            }
+            else {
+                printBoard(board);
+                strcpy(statusMsg, "No Deck loaded");
+            }
             printGameConsole(cmd,"OK");
         }
         else if(strcasecmp(cmd,"SD") == 0){

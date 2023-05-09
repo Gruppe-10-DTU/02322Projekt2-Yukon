@@ -30,6 +30,8 @@ int parseInteger(char *s2) {
 void startGame(Board* board) {
     //Head of the cmd line
     Command *cmdHead = (Command*) malloc(sizeof(Command));
+    cmdHead->nextCommand = NULL;
+    cmdHead->prevCommand = NULL;
     Command *cmd = (Command*) malloc(sizeof (Command));
 
     char *moveCmd = NULL;
@@ -56,6 +58,10 @@ void startGame(Board* board) {
 
             int doable = doCommand(board, cmd);
             if (doable == 1) {
+                if(cmdHead->nextCommand != NULL){
+                    freeCommandList(cmdHead->nextCommand);
+                    cmdHead->nextCommand = NULL;
+                }
                 lastMove = moveCmd;
                 cmdHead->nextCommand = cmd;
                 cmd->prevCommand = cmdHead;
@@ -74,8 +80,8 @@ void startGame(Board* board) {
         }
         else if(strcasecmp(moveCmd,"REDO") == 0) {
             if (cmdHead->nextCommand != NULL) {
-                doCommand(board, cmdHead);
                 cmdHead = cmdHead->nextCommand;
+                doCommand(board, cmdHead);
             } else {
                 strcpy(status, "No move to redo");
             }

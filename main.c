@@ -103,8 +103,8 @@ void startGame(Board* board) {
 int main() {
     char *statusMsg = (char *) calloc(100, sizeof(char));
     char *cmd = (char *) calloc(1024, sizeof(char));
-    char *cmdS1 = (char *) malloc(sizeof cmdS1);
-    char *cmdS2 = (char *) malloc(sizeof cmdS2);
+    char *cmdS1 = NULL;
+    char *cmdS2 = NULL;
     //Initial Setup
     clearView();
     printTitle();
@@ -165,9 +165,13 @@ int main() {
             printGameConsole(cmd,"OK");
         }
         else if(strcasecmp(cmd,"SD") == 0){
-            clearView();
-            printBoard(board);
-            printGameConsole(cmd,"OK");
+            if(cmdS2 != NULL){
+                saveDeck(deck, cmdS2);
+                clearView();
+                printGameConsole(cmd,"OK");
+            }else{
+                printGameConsole(cmd,"Filename needs to be written");
+            }
         }
         else if(strcasecmp(cmd,"QQ") == 0){
             strcpy(statusMsg, "Thank you for playing!");

@@ -34,7 +34,7 @@ void startGame(Board* board) {
 
     char *moveCmd = NULL;
     char *lastMove = (char *) malloc(sizeof moveCmd);
-    char *status = (char *) malloc(sizeof status);
+    char *status = (char *) calloc(1024,sizeof(char));
     lastMove = NULL;
     strcpy(status, "OK");
     while (!gameFinished(board)) {

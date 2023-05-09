@@ -165,9 +165,13 @@ int main() {
             printGameConsole(cmd,"OK");
         }
         else if(strcasecmp(cmd,"SD") == 0){
-            clearView();
-            printBoard(board);
-            printGameConsole(cmd,"OK");
+            if(cmdS2 != NULL){
+                saveDeck(deck, cmdS2);
+                clearView();
+                printGameConsole(cmd,"OK");
+            }else{
+                printGameConsole(cmd,"Filename needs to be written");
+            }
         }
         else if(strcasecmp(cmd,"QQ") == 0){
             strcpy(statusMsg, "Thank you for playing!");

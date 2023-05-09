@@ -52,14 +52,16 @@ void saveDeck(Card *deck, char *filename){
     FILE *file = NULL;
     char* path = malloc(strlen(filename + 6));
     #ifdef __WIN32__
-        sprintf(path,"..\\%s", filename);
+        sprintf(path,"..\\%s.txt", filename);
     #elif __linux__
-        sprintf(path,"../%s", filename);
+        sprintf(path,"../%s.txt", filename);
     #endif
     file = fopen(path, "a+");
     char check;
     if(fscanf(file, "c" ,check) != 1){
         saveCard(deck, file);
+    }else{
+        printf("Error saving deck, file already existed");
     }
     free(path);
     fclose(file);

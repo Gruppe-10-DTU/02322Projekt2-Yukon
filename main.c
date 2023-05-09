@@ -86,14 +86,15 @@ void startGame(Board* board) {
             clearView();
         }
     }
+    if (hasWon(board) == 1) {
+        printWin();
+    }
+    clearView();
+    free(board);
     free(lastMove);
     free(moveCmd);
     free(status);
     free(cmd);
-    clearView();
-    if (hasWon(board) == 1) {
-        printWin();
-    }
 }
 
 

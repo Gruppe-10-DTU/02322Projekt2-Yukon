@@ -93,9 +93,10 @@ void moveCard(Column *from, Column *to, Card *mvCard) {
  * @param to the place to move
  * @param toFoundation int 1 represents a move to foundation
  * @return 1 if valid
- *
+ *aa
  * @author Philip Astrup Cramer
  */
+
 int moveIsValid(Card *mvCard, Column *to, int toFoundation){
     if(!((mvCard)->visible)) return 0;
     for(Card *temp = to->head; temp; temp = temp->nextCard)

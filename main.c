@@ -149,13 +149,14 @@ int main() {
         }
         else if(strcasecmp(cmd,"SI") == 0){
             clearView();
+            split(&deck,2);
             printBoard(board);
             printGameConsole(cmd,"OK");
         }
         else if(strcasecmp(cmd,"SR") == 0){
             clearView();
             shuffle(&deck);
-            printBoard(board);
+            showDeck(board, deck, 0);
             printGameConsole(cmd,"OK");
         }
         else if(strcasecmp(cmd,"SD") == 0){

@@ -27,6 +27,8 @@ Card *deckFromFile(char *filename, char *statusMsg){
         if(!deckIsValid(deck, str[1], str[0], i, statusMsg)){
             freeDeck(deck);
             deck = NULL;
+            fclose(file);
+            free(path);
             break;
         }else{
             addCard(&deck, str[1], str[0]);
@@ -35,6 +37,12 @@ Card *deckFromFile(char *filename, char *statusMsg){
 
     // Closing the file
     fclose(file);
+    free(path);
+    if(countDeck(deck) != 52){
+        strcpy(statusMsg,"Deck doesn't have 52 cards");
+        freeDeck(deck);
+        return NULL;
+    }
     return deck;
 }
 
@@ -43,7 +51,11 @@ Card *deckFromFile(char *filename, char *statusMsg){
 void saveDeck(Card *deck, char *filename){
     FILE *file = NULL;
     char* path = malloc(strlen(filename + 6));
-    sprintf(path,"../%s", filename);
+    #ifdef __WIN32__
+        sprintf(path,"..\\%s", filename);
+    #elif __linux__
+        sprintf(path,"../%s", filename);
+    #endif
     file = fopen(path, "a+");
     char check;
     if(fscanf(file, "c" ,check) != 1){

@@ -21,23 +21,7 @@ int parseInteger(char *s2) {
     return result;
 }
 
-/**
- *
- * @param board the board we are playing on
- * @return returns 1 if the total size of all foundations are equal to 52, 0 if the total size of all foundations less than 52
- *
- * @author Asbjørn Nielsen
- */
-int hasWon(Board *board){
-    int size = 0;
-    for (int i = 0; i < 4; ++i) {
-        size += board->foundation[i].size;
-    }
-    if(size == 52)
-        return 1;
-    else
-        return 0;
-}
+
 /**
  *
  * @param board Board the game is started on
@@ -53,7 +37,7 @@ void startGame(Board* board) {
     char *status = (char *) malloc(sizeof status);
     lastMove = NULL;
     strcpy(status, "OK");
-    while (hasWon(board) != 1) {
+    while (!gameFinished(board)) {
         moveCmd = NULL;
         printBoard(board);
         //Used for debug only. Wouldn't print console output when debugging, found this solution online.
@@ -99,10 +83,11 @@ void startGame(Board* board) {
             clearView();
         }
     }
-    if (hasWon(board) == 1) {
+    if (gameFinished(board)) {
         printWin();
     }
     clearView();
+    clearBoard(board);
     printBoard(board);
     printGameConsole(lastMove,status);
     if(lastMove) free(lastMove);

@@ -118,6 +118,7 @@ int main() {
         cmd = strtok(cmd, "\n");
         cmdS1 = strtok(cmd," ");
         cmdS2 = strtok(NULL,"\n");
+        strcpy(statusMsg, "OK");
         if(strcasecmp(cmd,"P") == 0){
             if(!deck){
                 deck = newDeck(statusMsg);
@@ -142,12 +143,13 @@ int main() {
         }
         else if(strcasecmp(cmd,"SW") == 0){
             clearView();
-            if (deck) showDeck(board, deck, 1);
+            if (deck)
+                showDeck(board, deck, 1);
             else {
                 printBoard(board);
                 strcpy(statusMsg, "No Deck loaded");
             }
-            printGameConsole(cmd,"OK");
+            printGameConsole(cmd,statusMsg);
         }
         else if(strcasecmp(cmd,"SI") == 0){
             clearView();
@@ -156,7 +158,7 @@ int main() {
                 split(&deck, splitIndex);
             }else split(&deck,2);
             printBoard(board);
-            printGameConsole(cmd,"OK");
+            printGameConsole(cmd,statusMsg);
         }
         else if(strcasecmp(cmd,"SR") == 0){
             clearView();
@@ -168,13 +170,13 @@ int main() {
                 printBoard(board);
                 strcpy(statusMsg, "No Deck loaded");
             }
-            printGameConsole(cmd,"OK");
+            printGameConsole(cmd,statusMsg);
         }
         else if(strcasecmp(cmd,"SD") == 0){
             if(cmdS2 != NULL){
                 saveDeck(deck, cmdS2);
                 clearView();
-                printGameConsole(cmd,"OK");
+                printGameConsole(cmd,statusMsg);
             }else{
                 printGameConsole(cmd,"Filename needs to be written");
             }

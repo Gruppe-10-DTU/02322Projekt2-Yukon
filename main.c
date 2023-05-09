@@ -39,7 +39,7 @@ void startGame(Board* board) {
     char *lastMove = (char *) malloc(sizeof moveCmd);
     char *status = (char *) malloc(sizeof status);
     lastMove = NULL;
-    status = "OK";
+    strcpy(status, "OK");
     while (hasWon(board) != 1) {
         moveCmd = NULL;
         printBoard(board);
@@ -48,7 +48,7 @@ void startGame(Board* board) {
         printGameConsole(lastMove, status);
         scanf("%ms", &moveCmd);
         if (strcasecmp(moveCmd, "Q") == 0) {
-            printf("%s", "Exiting game...");
+            strcpy(status, "Exiting game...");
             break;
         }
         //Check to see if the input is one of the variants of valid commands.
@@ -62,16 +62,16 @@ void startGame(Board* board) {
                 cmdHead->nextCommand = cmd;
                 cmd->prevCommand = cmdHead;
                 cmdHead = cmd;
-                status = "OK";
+                strcpy(status, "OK");
             } else if (doable == 0) {
-                status = "Invalid Move";
+                strcpy(status, "Invalid Move");
             }
         }else if(strcasecmp(moveCmd,"UNDO") == 0){
             if(cmdHead->prevCommand != NULL){
                 undoCommand(board,cmdHead);
                 cmdHead = cmdHead->prevCommand;
             }else{
-                status = "No move to undo";
+                strcpy(status, "No move to undo");
             }
         }
         else if(strcasecmp(moveCmd,"REDO") == 0) {
@@ -79,10 +79,10 @@ void startGame(Board* board) {
                 doCommand(board, cmdHead);
                 cmdHead = cmdHead->nextCommand;
             } else {
-                status = "No move to redo";
+                strcpy(status, "No move to redo");
             }
         }else {
-            status = "Invalid Move";
+            strcpy(status, "Invalid Move");
             clearView();
         }
     }
@@ -90,8 +90,9 @@ void startGame(Board* board) {
         printWin();
     }
     clearView();
-    free(board);
-    free(lastMove);
+    printBoard(board);
+    printGameConsole(lastMove,status);
+    if(lastMove) free(lastMove);
     free(moveCmd);
     free(status);
     free(cmd);
@@ -101,6 +102,8 @@ void startGame(Board* board) {
 int main() {
     char *statusMsg = (char *) calloc(100, sizeof(char));
     char *cmd = NULL;
+    char *cmdS1 = (char *) malloc(sizeof cmdS1);
+    char *cmdS2 = (char *) malloc(sizeof cmdS2);
     //Initial Setup
     clearView();
     printTitle();
@@ -116,22 +119,26 @@ int main() {
     printTitle();
     while(1) {
         scanf("%ms", &cmd);
+        cmdS1 = strtok(cmd, "<");
+        cmdS2 = strtok(NULL,">");
         if(strcasecmp(cmd,"P") == 0){
+            if(!deck){
+                deck = newDeck(statusMsg);
+                shuffle(&deck);
+            }
             loadDeck(board,deck);
             startGame(board);
         }
         else if(strcasecmp(cmd,"LD") == 0){
-            scanf("Enter filename: %s", cmd);
-            deck = deckFromFile(cmd,"OK");
-            loadDeck(board,deck);
-            printBoard(board);
-        }
-        else if(strcasecmp(cmd,"LD") == 0){
-            if (cmd) {
-                deck = deckFromFile(cmd,statusMsg);
-            } else deck = newDeck(statusMsg);
             clearView();
-            showDeck(board, deck, 0);
+            if (cmdS2) {
+                deck = deckFromFile(cmdS2,statusMsg);
+            } else deck = newDeck(statusMsg);
+            if (deck) {
+                showDeck(board, deck, 0);
+            } else {
+                printBoard(board);
+            }
             printGameConsole(cmd,statusMsg);
         }
         else if(strcasecmp(cmd,"SW") == 0){

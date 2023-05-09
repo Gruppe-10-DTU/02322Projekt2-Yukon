@@ -19,10 +19,7 @@ int testLoadDeck(){
     loadDeck(board, deck);
     int columnCount[7] = {1,6,7,8,9,10,11};
     for(int i = 0; i < 7; i++){
-        if(board->column[i].size < columnCount[i]) {
-            //printf("\nCOLUMN %d SIZE %d", i ,board->column[i].size);
-            result++;
-        }
+        if(board->column[i].size < columnCount[i]) result++;
     }
     free(board);
     freeDeck(deck);

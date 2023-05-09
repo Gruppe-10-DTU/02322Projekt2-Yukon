@@ -108,6 +108,7 @@ void startGame(Board* board) {
     if(lastMove) free(lastMove);
     free(moveCmd);
     free(status);
+    freeCommandList(cmdHead);
     free(cmd);
     getchar();
 }

@@ -24,3 +24,4 @@ typedef struct command{
 Command *playCommand(Board *board,char *str);
 void undoCommand(Board *board, Command *com);
 int doCommand(Board *board, Command *com);
+void freeCommandList(Command *head);

@@ -169,3 +169,12 @@ int doCommand(Board *board, Command *com) {
     }
     return toReturn;
 }
+
+void freeCommandList(Command *head){
+    Command *tmp;
+    while (head != NULL){
+        tmp = head->nextCommand;
+        free(head);
+        head = tmp;
+    }
+}

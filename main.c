@@ -1,6 +1,7 @@
 //
 // Created by asbpo on 14-04-2023.
 //
+#include <unistd.h>
 #include "filehandler.h"
 #include "deck.h"
 #include "board.h"
@@ -90,11 +91,9 @@ void startGame(Board* board) {
     }
     if (gameFinished(board)) {
         printWin();
+        printGameConsole(" ", "Winner winner chicken dinner!");
     }
-    clearView();
     clearBoard(board);
-    printBoard(board);
-    printGameConsole(lastMove,status);
     free(lastMove);
     free(moveCmd);
     free(status);

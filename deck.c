@@ -48,8 +48,7 @@ void shuffle(Card **head){
 
     while(whileLoopCard != NULL){
         nextCard = whileLoopCard->nextCard;
-        //whileLoopCard->nextCard = NULL;
-        //whileLoopCard->prevCard = NULL;
+
         //Find the place for the card based on how many cards are placed.
         //The shuffle always start with one card
         placementCurrent =  (rand() % (placementMax+1));
@@ -113,6 +112,7 @@ void split(Card **head, int splitIndex){
         secondDeck = secondDeck->nextCard;
         firstDeck = firstDeck->nextCard;
     }
+
     firstDeck = firstDeck->prevCard;
     firstDeck->nextCard = NULL;
     for (int i = 1; i < splitIndex; ++i) {
@@ -152,6 +152,9 @@ void split(Card **head, int splitIndex){
             shufflePile = shufflePile->nextCard;
             firstDeck = firstDeck->nextCard;
         }
+    }
+    while (shufflePile->prevCard != NULL){
+        shufflePile = shufflePile->prevCard;
     }
     *head = shufflePile;
 }

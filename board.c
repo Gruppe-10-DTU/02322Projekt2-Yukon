@@ -188,7 +188,7 @@ void showDeck(Board *board, Card *deck, int visible){
         lineCount++;
     }
     printf("\n");
-    fflush(stdin);
+    fflush(stdout);
 }
 int gameFinished(Board *board){
     int result = 1;

@@ -42,8 +42,6 @@ void startGame(Board* board) {
     while (!gameFinished(board)) {
         moveCmd = NULL;
         printBoard(board);
-        //Used for debug only. Wouldn't print console output when debugging, found this solution online.
-        setbuf(stdout, 0);
         printGameConsole(lastMove, status);
         moveCmd = (char*) realloc(moveCmd, sizeof moveCmd);
         scanf("%s", moveCmd);
@@ -112,8 +110,6 @@ int main() {
     char *cmdS1 = NULL;
     char *cmdS2 = NULL;
     //Initial Setup
-    clearView();
-    printTitle();
     Board *board = createBoard();
     Card *deck = NULL;
     clearView();

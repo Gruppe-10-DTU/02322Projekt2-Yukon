@@ -14,5 +14,10 @@ int main(){
     testPrintBoard();
     testPrintGameConsole();
     printf("\n============================ BOARD TEST PRINT ============================\n");
+    char *status = (char *) calloc(1024,sizeof(char));
+    deckFromFile("TEST-files/invalidDeckTooManyCards.txt", status);
+    printf("%s\r\n", status);
+    deckFromFile("TEST-files/invalidDeckDublicateCards.txt", status);
+    printf("%s\r\n", status);
     return 0;
 }

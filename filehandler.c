@@ -29,7 +29,7 @@ Card *deckFromFile(char *filename, char *statusMsg){
             deck = NULL;
             fclose(file);
             free(path);
-            break;
+            return deck;
         }else{
             addCard(&deck, str[1], str[0]);
         }

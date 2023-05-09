@@ -4,6 +4,9 @@
 #include "board.h"
 #include "deck.h"
 #include "column.h"
+#include "command.h"
+#include <stdio.h>
+#include <conio.h>
 
 Board *createBoard(void){
     Board *board = (Board *) malloc(sizeof(Board));
@@ -74,7 +77,6 @@ void clearBoard(Board *board){
     }
 
 }
-
 void printBoard(Board *board){
     printf("C1\tC2\tC3\tC4\tC5\tC6\tC7\n\n");
     Column *columns = board->column;
@@ -102,7 +104,7 @@ void printBoard(Board *board){
         if(lineCount < COLUMNS && lineCount % 2 == 0){
             printf("\t");
             if(foundations[lineCount / 2].head != NULL){
-                printf("%c%c", foundations[rowCount / 2].head->order, foundations[rowCount / 2].head->suit);
+                printf("%c%c", foundations[lineCount / 2].head->order, foundations[lineCount / 2].head->suit);
             } else{
                 printf("[]");
             }
@@ -140,8 +142,21 @@ void printTitle(void){
            "\n");
     printGameConsole("WELCOME TO YUKON SOLITAIRE","PLEASE INPUT A COMMAND. FOR LIST OF VALID COMMANDS, SEE README.");
 }
+void printWin(){
+    clearView();
+    printf(
 
-void clearView(void){
+            " __   __                                                                    _         _       _   _                 _ \n"
+            " \\ \\ / /                                                                   | |       | |     | | (_)               | |\n"
+            "  \\ V /___  _   _  __      _____  _ __       ___ ___  _ __   __ _ _ __ __ _| |_ _   _| | __ _| |_ _  ___  _ __  ___| |\n"
+            "   \\ // _ \\| | | | \\ \\ /\\ / / _ \\| '_ \\     / __/ _ \\| '_ \\ / _` | '__/ _` | __| | | | |/ _` | __| |/ _ \\| '_ \\/ __| |\n"
+            "   | | (_) | |_| |  \\ V  V / (_) | | | |_  | (_| (_) | | | | (_| | | | (_| | |_| |_| | | (_| | |_| | (_) | | | \\__ \\_|\n"
+            "   \\_/\\___/ \\__,_|   \\_/\\_/ \\___/|_| |_( )  \\___\\___/|_| |_|\\__, |_|  \\__,_|\\__|\\__,_|_|\\__,_|\\__|_|\\___/|_| |_|___(_)\n"
+            "                                       |/                    __/ |                                                    \n"
+            "                                                            |___/                                                     \n"
+            "                                                                                                                      \n");
+}
+void clearView(){
 #ifdef __linux__
     system("clear");
 #elif __WIN32__
@@ -182,6 +197,9 @@ int gameFinished(Board *board){
     }
     return result;
 }
+
+
+
 
 
 

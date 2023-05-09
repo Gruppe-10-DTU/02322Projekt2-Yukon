@@ -91,7 +91,7 @@ void startGame(Board* board) {
     clearBoard(board);
     printBoard(board);
     printGameConsole(lastMove,status);
-    if(lastMove) free(lastMove);
+    free(lastMove);
     free(moveCmd);
     free(status);
     freeCommandList(cmdHead);
@@ -109,14 +109,8 @@ int main() {
     //Initial Setup
     clearView();
     printTitle();
-
-    //Reader
-
-    //Nyt deck
-    Card *deck = newDeck("OK");
-    shuffle(&deck);
-
     Board *board = createBoard();
+    Card *deck = NULL;
     clearView();
     printTitle();
     while(1) {
@@ -135,6 +129,7 @@ int main() {
         }
         else if(strcasecmp(cmd,"LD") == 0){
             clearView();
+            if (deck) freeDeck(deck);
             if (cmdS2) {
                 deck = deckFromFile(cmdS2,statusMsg);
             } else deck = newDeck(statusMsg);
@@ -190,7 +185,7 @@ int main() {
     }
     free(cmd);
     free(board);
-    if(deck) free(deck);
+    if(deck) freeDeck(deck);
     free(statusMsg);
     return 0;
 }

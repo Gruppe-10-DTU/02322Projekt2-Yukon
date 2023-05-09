@@ -41,7 +41,7 @@ void startGame(Board* board) {
         moveCmd = NULL;
         printBoard(board);
         printGameConsole(lastMove, status);
-        moveCmd = (char*) malloc(sizeof moveCmd);
+        moveCmd = (char*) realloc(moveCmd, sizeof moveCmd);
         scanf("%s", moveCmd);
         if (strcasecmp(moveCmd, "Q") == 0) {
             strcpy(status, "Exiting game...");

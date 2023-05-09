@@ -96,7 +96,6 @@ void startGame(Board* board) {
     free(status);
     freeCommandList(cmdHead);
     free(cmd);
-    free(moveCmd);
     getchar();
 }
 

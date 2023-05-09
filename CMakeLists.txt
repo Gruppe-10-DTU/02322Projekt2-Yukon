@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
 project(02322Projekt2_Yukon C)
 
-set(CMAKE_C_STANDARD 23)
+set(CMAKE_C_STANDARD 11)
 
 set(Headers
         deck.h

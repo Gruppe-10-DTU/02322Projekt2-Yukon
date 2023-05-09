@@ -112,10 +112,9 @@ int main() {
     shuffle(&deck);
 
     Board *board = createBoard();
-
+    clearView();
+    printTitle();
     while(1) {
-        clearView();
-        printTitle();
         scanf("%ms", &cmd);
         if(strcasecmp(cmd,"P") == 0){
             loadDeck(board,deck);

@@ -1,5 +1,4 @@
 #include<stdlib.h>
-#include<stdio.h>
 #include "../column.h"
 #include "column-test.h"
 

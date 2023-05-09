@@ -93,7 +93,7 @@ void moveCard(Column *from, Column *to, Card *mvCard) {
  * @param to the place to move
  * @param toFoundation int 1 represents a move to foundation
  * @return 1 if valid
- *aa
+ *
  * @author Philip Astrup Cramer
  */
 

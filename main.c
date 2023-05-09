@@ -92,6 +92,9 @@ void startGame(Board* board) {
     if (gameFinished(board)) {
         printWin();
         printGameConsole(" ", "Winner winner chicken dinner!");
+    }else{
+        printBoard(board);
+        printGameConsole(moveCmd, status);
     }
     clearBoard(board);
     free(lastMove);

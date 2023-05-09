@@ -9,7 +9,17 @@
 #include "command.h"
 #define INT_OFFSET 48
 
-int parseInteger(char *s2);
+
+int parseInteger(char *s2) {
+    int result = 0;
+    int tmp = 0;
+    for(int i = 0; s2[i]; i++){
+        tmp = ((int) s2[i]) - INT_OFFSET;
+        result *= 10;
+        result += tmp;
+    }
+    return result;
+}
 
 /**
  *
@@ -190,15 +200,4 @@ int main() {
     if(deck) free(deck);
     free(statusMsg);
     return 0;
-}
-
-int parseInteger(char *s2) {
-    int result = 0;
-    int tmp = 0;
-    for(int i = 0; s2[i]; i++){
-        tmp = ((int) s2[i]) - INT_OFFSET;
-        result *= 10;
-        result += tmp;
-    }
-    return result;
 }

@@ -106,7 +106,7 @@ int moveIsValid(Card *mvCard, Column *to, int toFoundation){
     char toOrder = (to)->head->order;
     int direction = 1;
     if(toFoundation) direction *= -1;
-    char deck0rder[14] = {NULL, 'A', '2','3','4','5','6','7','8','9','T','J','Q','K'};
+    char deck0rder[14] = {'\0', 'A', '2','3','4','5','6','7','8','9','T','J','Q','K'};
     if((mvSuit != toSuit) ^ (toFoundation)){                        // if to foundation suit's cant match
         int mvOrderval, toOrderVal;
         for (int i = 1; i < 14; i++){                               //
